@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🧪 Döner Bot Test</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, sans-serif; background: #f5f6fa; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; padding:2rem; }
+  .card { background:#fff; border-radius:20px; padding:2rem; max-width:480px; width:100%; box-shadow:0 4px 20px rgba(0,0,0,.08); text-align:center; }
+  h1 { font-size:1.6rem; font-weight:900; color:#1a1a2e; margin-bottom:.5rem; }
+  p { color:#888; font-size:.95rem; margin-bottom:1.5rem; }
+  .info { background:#f8f8ff; border:1px solid #e8e8f8; border-radius:12px; padding:1rem; text-align:left; font-size:.85rem; color:#555; line-height:1.8; }
+  .info strong { color:#1a1a2e; }
+  .badge { display:inline-block; background:#e6faf6; color:#059669; border:1px solid #a7f3d0; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700; margin-bottom:1rem; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">🟢 Bot aktiv</div>
+    <h1>🥙 Döner & Pizzahaus</h1>
+    <p>Dautpetal — KI-Telefonassistent Test</p>
+    <div class="info">
+      <strong>📍</strong> Gladenbacher Str. 3, 35232 Dautpetal<br>
+      <strong>⏰</strong> Mo-Fr + So: 11-22 Uhr | Sa: Ruhetag<br>
+      <strong>📞</strong> 06461/8082443
+    </div>
+  </div>
+
+  <div class="card">
+    <p style="margin-bottom:.5rem;color:#7c3aed;font-weight:700">🎤 Jetzt mit dem Bot sprechen:</p>
+    <p style="font-size:.8rem">Teste eine Bestellung — sie erscheint sofort in Supabase</p>
+    <elevenlabs-convai agent-id="agent_4001kpjn8ex1e2x9fnjr10vk93bp"></elevenlabs-convai>
+  </div>
+
+  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+</body>
+</html>
