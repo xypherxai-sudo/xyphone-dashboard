@@ -328,6 +328,7 @@ function doLogin() {
     document.getElementById('headerRestaurant').textContent = user.name;
     loadOrders();
     pollInterval = setInterval(loadOrders, 10000);
+    requestNotificationPermission();
   } else {
     document.getElementById('loginError').style.display = 'block';
   }
@@ -435,18 +436,51 @@ function formatTime(ts) {
   return d.toLocaleTimeString('de-DE', {hour:'2-digit', minute:'2-digit'});
 }
 
+function playBing() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.setValueAtTime(880, ctx.currentTime);
+    o.frequency.setValueAtTime(1100, ctx.currentTime + 0.1);
+    g.gain.setValueAtTime(0.4, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.6);
+  } catch(e) {}
+}
+
 function showNotification(msg) {
+  // In-App Notification
   const n = document.createElement('div');
   n.className = 'notif';
   n.textContent = msg;
   document.body.appendChild(n);
   setTimeout(() => n.remove(), 4000);
+  // Browser Push Notification
+  if (Notification.permission === 'granted') {
+    new Notification('🍕 Neue Bestellung!', {
+      body: msg,
+      icon: 'https://xyphone.de/icon-192.png',
+      badge: 'https://xyphone.de/icon-192.png',
+      tag: 'new-order',
+      requireInteraction: false
+    });
+  }
 }
 
 function ringBell() {
   const bell = document.getElementById('bellIcon');
   bell.className = 'bell';
   setTimeout(() => bell.className = '', 1500);
+  playBing();
+}
+
+function requestNotificationPermission() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
 }
 </script>
 </body>
