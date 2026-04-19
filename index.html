@@ -4,84 +4,238 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xyphone Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#0f0f1a; color:white; min-height:100vh; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background:#0a0a18; color:white; min-height:100vh; }
 
     /* LOGIN */
-    #loginScreen { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:1rem; }
-    .login-box { background:#1a1a2e; border:1px solid rgba(124,58,237,0.3); border-radius:24px; padding:2.5rem; width:100%; max-width:380px; text-align:center; }
-    .login-logo { font-size:2.5rem; margin-bottom:0.5rem; }
-    .login-box h1 { font-size:1.4rem; font-weight:800; margin-bottom:0.3rem; }
-    .login-box p { color:rgba(255,255,255,0.4); font-size:0.9rem; margin-bottom:2rem; }
-    .login-box input { width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:0.9rem 1rem; color:white; font-size:1rem; font-family:inherit; outline:none; margin-bottom:0.8rem; }
-    .login-box input:focus { border-color:rgba(124,58,237,0.6); }
-    .login-btn { width:100%; background:linear-gradient(135deg,#7c3aed,#5b21b6); color:white; border:none; border-radius:12px; padding:1rem; font-size:1rem; font-weight:700; font-family:inherit; cursor:pointer; }
-    .login-error { color:#f87171; font-size:0.85rem; margin-top:0.5rem; display:none; }
+    #loginScreen {
+      display:flex; align-items:center; justify-content:center;
+      min-height:100vh; padding:1rem;
+      background: radial-gradient(ellipse at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(91,33,182,0.1) 0%, transparent 50%),
+                  #0a0a18;
+    }
+    .login-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 28px;
+      padding: 2.8rem 2.5rem;
+      width: 100%; max-width: 400px;
+      text-align: center;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.5);
+    }
+    .login-logo {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg,#7c3aed,#5b21b6);
+      border-radius: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin-bottom: 1.2rem;
+      box-shadow: 0 8px 24px rgba(124,58,237,0.4);
+    }
+    .login-box h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
+    .login-box p { color: rgba(255,255,255,0.35); font-size: 0.88rem; margin-bottom: 2rem; line-height: 1.5; }
+    .login-box input {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 0.95rem 1.1rem;
+      color: white; font-size: 0.95rem; font-family: inherit;
+      outline: none; margin-bottom: 0.75rem;
+      transition: all 0.2s;
+    }
+    .login-box input::placeholder { color: rgba(255,255,255,0.3); }
+    .login-box input:focus { border-color: rgba(124,58,237,0.6); background: rgba(124,58,237,0.08); }
+    .login-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      color: white; border: none; border-radius: 14px;
+      padding: 1rem; font-size: 0.95rem; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      transition: all 0.2s;
+      margin-top: 0.3rem;
+    }
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(124,58,237,0.5); }
+    .login-btn:active { transform: translateY(0); }
+    .login-error { color: #f87171; font-size: 0.82rem; margin-top: 0.6rem; display: none; }
 
     /* DASHBOARD */
-    #dashboard { display:none; }
-    
-    /* HEADER */
-    .header { background:#1a1a2e; border-bottom:1px solid rgba(124,58,237,0.2); padding:1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
-    .header-left { display:flex; align-items:center; gap:12px; }
-    .header-logo { font-size:1.3rem; font-weight:900; color:#a78bfa; }
-    .header-restaurant { font-size:0.9rem; color:rgba(255,255,255,0.5); }
-    .header-right { display:flex; align-items:center; gap:12px; }
-    .status-dot { width:10px; height:10px; border-radius:50%; background:#00c48c; animation:pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-    .logout-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); border-radius:8px; padding:0.4rem 0.8rem; font-size:0.8rem; cursor:pointer; font-family:inherit; }
+    #dashboard { display: none; }
 
-    /* STATS BAR */
-    .stats { display:flex; gap:1rem; padding:1.2rem 1.5rem; background:#13132a; border-bottom:1px solid rgba(124,58,237,0.1); flex-wrap:wrap; }
-    .stat-item { background:rgba(255,255,255,0.04); border:1px solid rgba(124,58,237,0.2); border-radius:12px; padding:0.8rem 1.2rem; min-width:120px; }
-    .stat-item .num { font-size:1.6rem; font-weight:900; color:#a78bfa; }
-    .stat-item .label { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+    /* HEADER */
+    .header {
+      background: rgba(14,14,28,0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,58,237,0.15);
+      padding: 0.9rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-logo { font-size: 1.1rem; font-weight: 900; color: white; letter-spacing: -0.02em; }
+    .header-logo span { color: #a78bfa; }
+    .header-restaurant {
+      font-size: 0.8rem; color: rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.06);
+      padding: 3px 10px; border-radius: 99px;
+    }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .live-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(0,196,140,0.1); border: 1px solid rgba(0,196,140,0.2);
+      border-radius: 99px; padding: 4px 10px;
+      font-size: 0.75rem; color: #00c48c; font-weight: 600;
+    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: #00c48c; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .logout-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.4);
+      border-radius: 10px; padding: 0.4rem 0.9rem;
+      font-size: 0.78rem; cursor: pointer; font-family: inherit;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+
+    /* STATS */
+    .stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1rem; padding: 1.2rem 1.5rem;
+      background: #0a0a18;
+    }
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px; padding: 1.1rem 1.2rem;
+      transition: all 0.2s;
+    }
+    .stat-card:hover { border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.05); }
+    .stat-icon { font-size: 1.3rem; margin-bottom: 0.6rem; }
+    .stat-num { font-size: 1.8rem; font-weight: 900; color: #a78bfa; letter-spacing: -0.03em; line-height: 1; }
+    .stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* FILTERS */
-    .filters { padding:1rem 1.5rem; display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center; }
-    .filter-btn { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.6); border-radius:99px; padding:0.4rem 1rem; font-size:0.85rem; cursor:pointer; font-family:inherit; transition:all 0.2s; }
-    .filter-btn.active { background:rgba(124,58,237,0.25); border-color:rgba(124,58,237,0.5); color:#a78bfa; }
-    .refresh-btn { margin-left:auto; background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#a78bfa; border-radius:99px; padding:0.4rem 1rem; font-size:0.85rem; cursor:pointer; font-family:inherit; }
+    .filters {
+      padding: 0.9rem 1.5rem;
+      display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .filter-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      border-radius: 99px; padding: 0.4rem 0.9rem;
+      font-size: 0.8rem; cursor: pointer; font-family: inherit;
+      transition: all 0.2s; font-weight: 500;
+    }
+    .filter-btn:hover { background: rgba(255,255,255,0.07); color: white; }
+    .filter-btn.active {
+      background: rgba(124,58,237,0.2);
+      border-color: rgba(124,58,237,0.4);
+      color: #c4b5fd; font-weight: 600;
+    }
+    .refresh-btn {
+      margin-left: auto;
+      background: rgba(124,58,237,0.1);
+      border: 1px solid rgba(124,58,237,0.25);
+      color: #a78bfa;
+      border-radius: 99px; padding: 0.4rem 1rem;
+      font-size: 0.8rem; cursor: pointer; font-family: inherit;
+      transition: all 0.2s; font-weight: 500;
+    }
+    .refresh-btn:hover { background: rgba(124,58,237,0.2); }
 
     /* ORDERS */
-    .orders { padding:0 1.5rem 2rem; display:flex; flex-direction:column; gap:0.8rem; }
-    .order-card { background:#1a1a2e; border:1px solid rgba(124,58,237,0.2); border-radius:16px; padding:1.2rem; transition:all 0.2s; }
-    .order-card.neu { border-left:3px solid #f59e0b; }
-    .order-card.fertig { border-left:3px solid #00c48c; opacity:0.6; }
-    .order-card.abgebrochen { border-left:3px solid #ef4444; opacity:0.5; }
-    .order-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
-    .order-badge { font-size:0.7rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:3px 10px; border-radius:99px; }
-    .badge-neu { background:rgba(245,158,11,0.15); color:#f59e0b; border:1px solid rgba(245,158,11,0.3); }
-    .badge-fertig { background:rgba(0,196,140,0.15); color:#00c48c; border:1px solid rgba(0,196,140,0.3); }
-    .badge-abgebrochen { background:rgba(239,68,68,0.15); color:#ef4444; border:1px solid rgba(239,68,68,0.3); }
-    .order-time { font-size:0.78rem; color:rgba(255,255,255,0.3); }
-    .order-type { display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; color:rgba(255,255,255,0.4); background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:6px; }
-    .order-name { font-weight:700; font-size:1rem; margin-bottom:0.3rem; }
-    .order-items { color:rgba(255,255,255,0.7); font-size:0.9rem; line-height:1.5; margin-bottom:0.8rem; }
-    .order-note { font-size:0.82rem; color:rgba(255,255,255,0.4); margin-bottom:0.8rem; }
-    .order-actions { display:flex; gap:0.6rem; }
-    .btn-fertig { background:linear-gradient(135deg,#00c48c,#00a070); color:white; border:none; border-radius:10px; padding:0.6rem 1.2rem; font-size:0.88rem; font-weight:700; cursor:pointer; font-family:inherit; flex:1; }
-    .btn-abbrechen { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); color:#ef4444; border-radius:10px; padding:0.6rem 1rem; font-size:0.85rem; cursor:pointer; font-family:inherit; }
+    .orders { padding: 1rem 1.5rem 3rem; display: flex; flex-direction: column; gap: 0.7rem; }
 
-    /* EMPTY STATE */
-    .empty { text-align:center; padding:4rem 1rem; color:rgba(255,255,255,0.3); }
-    .empty-icon { font-size:3rem; margin-bottom:1rem; }
+    .order-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px; padding: 1.2rem 1.3rem;
+      transition: all 0.2s;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+    .order-card:hover { border-color: rgba(124,58,237,0.25); background: rgba(124,58,237,0.04); }
+    .order-card.neu { border-left: 3px solid #f59e0b; }
+    .order-card.fertig { border-left: 3px solid #00c48c; opacity: 0.55; }
+    .order-card.abgebrochen { border-left: 3px solid #ef4444; opacity: 0.45; }
+
+    .order-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
+    .order-meta { display: flex; align-items: center; gap: 8px; }
+    .order-badge {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 99px;
+    }
+    .badge-neu { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+    .badge-fertig { background: rgba(0,196,140,0.12); color: #00c48c; border: 1px solid rgba(0,196,140,0.25); }
+    .badge-abgebrochen { background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+    .order-type {
+      font-size: 0.72rem; color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.05);
+      padding: 2px 8px; border-radius: 6px;
+    }
+    .order-time { font-size: 0.75rem; color: rgba(255,255,255,0.25); font-weight: 500; }
+
+    .order-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; letter-spacing: -0.01em; }
+    .order-items { color: rgba(255,255,255,0.6); font-size: 0.88rem; line-height: 1.5; margin-bottom: 0.9rem; }
+    .order-note {
+      font-size: 0.8rem; color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px; padding: 6px 10px;
+      margin-bottom: 0.9rem;
+    }
+    .order-actions { display: flex; gap: 0.6rem; }
+    .btn-fertig {
+      background: linear-gradient(135deg, #00c48c, #00a070);
+      color: white; border: none; border-radius: 12px;
+      padding: 0.65rem 1.2rem; font-size: 0.85rem; font-weight: 700;
+      cursor: pointer; font-family: inherit; flex: 1;
+      box-shadow: 0 2px 12px rgba(0,196,140,0.25);
+      transition: all 0.2s;
+    }
+    .btn-fertig:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,196,140,0.35); }
+    .btn-abbrechen {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #f87171; border-radius: 12px;
+      padding: 0.65rem 1rem; font-size: 0.85rem;
+      cursor: pointer; font-family: inherit; transition: all 0.2s;
+    }
+    .btn-abbrechen:hover { background: rgba(239,68,68,0.15); }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 5rem 1rem; color: rgba(255,255,255,0.2); }
+    .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; filter: grayscale(0.5); }
+    .empty p { font-size: 0.9rem; }
 
     /* NOTIFICATION */
-    .notif { position:fixed; top:80px; right:1rem; background:#1a1a2e; border:1px solid rgba(124,58,237,0.4); border-radius:14px; padding:1rem 1.2rem; font-size:0.9rem; z-index:1000; animation:slideIn 0.3s ease; box-shadow:0 8px 30px rgba(124,58,237,0.3); max-width:300px; }
-    @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:translateX(0);opacity:1} }
-
-    /* BELL ANIMATION */
-    .bell { font-size:1.4rem; animation:ringBell 0.5s ease 3; }
+    .notif {
+      position: fixed; top: 80px; right: 1rem;
+      background: rgba(14,14,28,0.95);
+      border: 1px solid rgba(124,58,237,0.4);
+      border-radius: 16px; padding: 1rem 1.3rem;
+      font-size: 0.88rem; z-index: 1000;
+      animation: slideIn 0.3s ease;
+      box-shadow: 0 8px 40px rgba(124,58,237,0.3);
+      max-width: 300px; backdrop-filter: blur(20px);
+    }
+    @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:none;opacity:1} }
+    .bell { font-size: 1.3rem; animation: ringBell 0.5s ease 3; }
     @keyframes ringBell { 0%,100%{transform:rotate(0)} 25%{transform:rotate(20deg)} 75%{transform:rotate(-20deg)} }
 
     @media(max-width:480px) {
-      .stats { gap:0.6rem; }
-      .stat-item { min-width:90px; padding:0.6rem 0.8rem; }
-      .stat-item .num { font-size:1.3rem; }
+      .stats { grid-template-columns: repeat(3,1fr); gap:0.5rem; }
+      .stat-num { font-size:1.4rem; }
       .header { padding:0.8rem 1rem; }
-      .orders { padding:0 1rem 2rem; }
+      .orders { padding:0.8rem 1rem 2rem; }
+      .filters { padding:0.8rem 1rem; }
     }
   </style>
 </head>
@@ -92,11 +246,11 @@
   <div class="login-box">
     <div class="login-logo">🍕</div>
     <h1>Xyphone Dashboard</h1>
-    <p>Melde dich an um deine Bestellungen zu sehen</p>
+    <p>Melde dich an um deine Bestellungen einzusehen</p>
     <input type="text" id="loginUser" placeholder="Benutzername" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()" />
     <input type="password" id="loginPass" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()" />
     <button class="login-btn" onclick="doLogin()">Anmelden →</button>
-    <div class="login-error" id="loginError">❌ Falscher Benutzername oder Passwort</div>
+    <div class="login-error" id="loginError">Falscher Benutzername oder Passwort</div>
   </div>
 </div>
 
@@ -104,28 +258,33 @@
 <div id="dashboard">
   <div class="header">
     <div class="header-left">
-      <div class="header-logo">🤖 Xyphone</div>
+      <div class="header-logo">🤖 <span>Xyphone</span></div>
       <div class="header-restaurant" id="headerRestaurant">—</div>
     </div>
     <div class="header-right">
-      <span class="status-dot" title="Live"></span>
-      <span id="bellIcon" style="font-size:1.3rem;">🔔</span>
+      <div class="live-badge">
+        <span class="status-dot"></span> Live
+      </div>
+      <span id="bellIcon" style="font-size:1.2rem;">🔔</span>
       <button class="logout-btn" onclick="doLogout()">Abmelden</button>
     </div>
   </div>
 
   <div class="stats">
-    <div class="stat-item">
-      <div class="num" id="statNeu">0</div>
-      <div class="label">Neue Bestellungen</div>
+    <div class="stat-card">
+      <div class="stat-icon">🟡</div>
+      <div class="stat-num" id="statNeu">0</div>
+      <div class="stat-label">Neue Bestellungen</div>
     </div>
-    <div class="stat-item">
-      <div class="num" id="statHeute">0</div>
-      <div class="label">Heute gesamt</div>
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div class="stat-num" id="statHeute">0</div>
+      <div class="stat-label">Heute gesamt</div>
     </div>
-    <div class="stat-item">
-      <div class="num" id="statFertig">0</div>
-      <div class="label">Erledigt heute</div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-num" id="statFertig">0</div>
+      <div class="stat-label">Erledigt heute</div>
     </div>
   </div>
 
@@ -135,7 +294,7 @@
     <button class="filter-btn" onclick="setFilter('fertig', this)">✅ Fertig</button>
     <button class="filter-btn" onclick="setFilter('lieferung', this)">🚗 Lieferung</button>
     <button class="filter-btn" onclick="setFilter('abholung', this)">🏃 Abholung</button>
-    <button class="refresh-btn" onclick="loadOrders()">🔄 Aktualisieren</button>
+    <button class="refresh-btn" onclick="loadOrders()">↻ Aktualisieren</button>
   </div>
 
   <div class="orders" id="ordersList"></div>
@@ -145,7 +304,6 @@
 const SUPABASE_URL = 'https://llrnusfadlazswgudxjt.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxscm51c2ZhZGxhenN3Z3VkeGp0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTE1NjY1MywiZXhwIjoyMDkwNzMyNjUzfQ.LkBEymbvVeok8qt2Fj_DCogZzp6jhdE0RFYs1L4mv2k';
 
-// Simple user DB (extend later)
 const USERS = {
   'pizzeria_latina': { pass: 'latina123', name: 'Pizzeria Latina', rid: 'pizzeria_latina' },
   'dautpetal_doener': { pass: 'DoenerBot2025!', name: 'Döner & Pizzahaus Dautpetal', rid: 'dautpetal_doener' },
@@ -169,7 +327,6 @@ function doLogin() {
     document.getElementById('dashboard').style.display = 'block';
     document.getElementById('headerRestaurant').textContent = user.name;
     loadOrders();
-    // Poll every 10 seconds
     pollInterval = setInterval(loadOrders, 10000);
   } else {
     document.getElementById('loginError').style.display = 'block';
@@ -187,30 +344,23 @@ function doLogout() {
 
 async function loadOrders() {
   if (!currentUser) return;
-  
   let url = `${SUPABASE_URL}/rest/v1/orders?order=created_at.desc&limit=50`;
   if (currentUser.rid) url += `&restaurant_id=eq.${currentUser.rid}`;
-
   try {
     const res = await fetch(url, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
     });
     allOrders = await res.json();
-    if (!Array.isArray(allOrders)) { allOrders = []; }
-    
-    // Check for new orders
+    if (!Array.isArray(allOrders)) allOrders = [];
     const neuCount = allOrders.filter(o => o.status === 'neu').length;
     if (neuCount > lastOrderCount && lastOrderCount > 0) {
       showNotification(`🔔 Neue Bestellung eingegangen!`);
       ringBell();
     }
     lastOrderCount = neuCount;
-    
     updateStats();
     renderOrders();
-  } catch(e) {
-    console.error(e);
-  }
+  } catch(e) { console.error(e); }
 }
 
 function updateStats() {
@@ -224,22 +374,21 @@ function updateStats() {
 function renderOrders() {
   const list = document.getElementById('ordersList');
   let filtered = allOrders;
-  
   if (currentFilter === 'neu') filtered = allOrders.filter(o => o.status === 'neu');
   else if (currentFilter === 'fertig') filtered = allOrders.filter(o => o.status === 'fertig');
   else if (currentFilter === 'lieferung') filtered = allOrders.filter(o => o.typ === 'lieferung');
   else if (currentFilter === 'abholung') filtered = allOrders.filter(o => o.typ === 'abholung');
 
   if (!filtered.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><p>Keine Bestellungen</p></div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><p>Keine Bestellungen vorhanden</p></div>`;
     return;
   }
 
   list.innerHTML = filtered.map(o => `
     <div class="order-card ${o.status}" id="card-${o.id}">
       <div class="order-header">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span class="order-badge badge-${o.status}">${o.status === 'neu' ? '🟡 Neu' : o.status === 'fertig' ? '✅ Fertig' : '❌ Abgebrochen'}</span>
+        <div class="order-meta">
+          <span class="order-badge badge-${o.status}">${o.status === 'neu' ? '● Neu' : o.status === 'fertig' ? '✓ Fertig' : '✕ Abgebrochen'}</span>
           <span class="order-type">${o.typ === 'lieferung' ? '🚗 Lieferung' : '🏃 Abholung'}</span>
         </div>
         <span class="order-time">${formatTime(o.created_at)}</span>
@@ -249,7 +398,7 @@ function renderOrders() {
       ${o.notiz ? `<div class="order-note">📝 ${o.notiz}</div>` : ''}
       ${o.status === 'neu' ? `
         <div class="order-actions">
-          <button class="btn-fertig" onclick="updateStatus(${o.id}, 'fertig')">✅ Fertig</button>
+          <button class="btn-fertig" onclick="updateStatus(${o.id}, 'fertig')">✓ Als fertig markieren</button>
           <button class="btn-abbrechen" onclick="updateStatus(${o.id}, 'abgebrochen')">✕</button>
         </div>` : ''}
     </div>

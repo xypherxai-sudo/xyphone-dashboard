@@ -4,112 +4,167 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Xyphone Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f6fb;color:#1a1a2e;min-height:100vh}
+body{font-family:'Inter',-apple-system,sans-serif;background:#f7f7fc;color:#1a1a2e;min-height:100vh}
 
 /* LOGIN */
-#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;background:linear-gradient(135deg,#f0f0ff,#e8eaf6)}
-.login-box{background:#fff;border:1px solid rgba(124,58,237,.15);border-radius:24px;padding:2.5rem;width:100%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(124,58,237,.1)}
-.login-box h1{font-size:1.5rem;font-weight:900;margin-bottom:.3rem;color:#1a1a2e}
-.login-box p{color:#888;font-size:.85rem;margin-bottom:2rem}
-.login-box input{width:100%;background:#f8f8ff;border:1px solid #e0e0f0;border-radius:12px;padding:.9rem 1rem;color:#1a1a2e;font-size:1rem;font-family:inherit;outline:none;margin-bottom:.8rem}
-.login-box input:focus{border-color:rgba(124,58,237,.5);background:#fff}
-.login-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:12px;padding:1rem;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer}
-.err{color:#e53e3e;font-size:.82rem;margin-top:.5rem;display:none}
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;
+  background:radial-gradient(ellipse at 30% 40%,rgba(124,58,237,.08),transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(91,33,182,.06),transparent 50%),#f7f7fc}
+.login-box{background:#fff;border:1px solid rgba(124,58,237,.12);border-radius:28px;padding:2.8rem 2.5rem;
+  width:100%;max-width:380px;text-align:center;
+  box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 60px rgba(124,58,237,.1)}
+.login-icon{width:64px;height:64px;background:linear-gradient(135deg,#7c3aed,#5b21b6);border-radius:20px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:1.9rem;margin-bottom:1.2rem;
+  box-shadow:0 8px 24px rgba(124,58,237,.3)}
+.login-box h1{font-size:1.5rem;font-weight:800;margin-bottom:.4rem;color:#0f0f1f;letter-spacing:-.03em}
+.login-box p{color:#999;font-size:.85rem;margin-bottom:2rem}
+.login-box input{width:100%;background:#f9f9ff;border:1.5px solid #ebe8ff;border-radius:14px;
+  padding:.9rem 1.1rem;color:#1a1a2e;font-size:.95rem;font-family:inherit;outline:none;margin-bottom:.75rem;transition:.2s}
+.login-box input:focus{border-color:#a78bfa;background:#fff;box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.login-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;
+  border-radius:14px;padding:1rem;font-size:.95rem;font-weight:700;font-family:inherit;cursor:pointer;
+  box-shadow:0 4px 20px rgba(124,58,237,.35);transition:.2s;margin-top:.2rem}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(124,58,237,.45)}
+.err{color:#e53e3e;font-size:.8rem;margin-top:.6rem;display:none}
 
 /* LAYOUT */
 #app{display:none;min-height:100vh}
-.header{background:#fff;border-bottom:1px solid #e8e8f8;padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.06)}
-.logo{font-size:1.2rem;font-weight:900;color:#7c3aed;letter-spacing:-.01em}
-.logo span{color:#aaa;font-weight:400;font-size:.85rem;margin-left:8px}
-.hbtn{background:#f5f5ff;border:1px solid #e0e0f0;color:#666;border-radius:8px;padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:.2s}
-.hbtn:hover{background:#ede9ff;border-color:#c4b5fd;color:#7c3aed}
-.hbtn.red:hover{background:#fff5f5;border-color:#fca5a5;color:#e53e3e}
+
+/* HEADER */
+.header{background:#fff;border-bottom:1px solid #eeecff;padding:.85rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;box-shadow:0 1px 12px rgba(0,0,0,.06)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:34px;height:34px;background:linear-gradient(135deg,#7c3aed,#5b21b6);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;box-shadow:0 2px 8px rgba(124,58,237,.3)}
+.logo-text{font-size:1.05rem;font-weight:900;color:#0f0f1f;letter-spacing:-.03em}
+.logo-text span{color:#aaa;font-weight:500;font-size:.78rem;margin-left:6px;letter-spacing:0}
+.header-right{display:flex;align-items:center;gap:8px}
+.hbtn{background:#f8f6ff;border:1.5px solid #ebe8ff;color:#7c3aed;border-radius:10px;
+  padding:.4rem .9rem;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.2s}
+.hbtn:hover{background:#ede9ff;border-color:#c4b5fd}
+.hbtn.red{color:#dc2626;background:#fff5f5;border-color:#fecaca}
+.hbtn.red:hover{background:#fee2e2}
+#lastSync{font-size:.75rem;color:#bbb}
 
 /* TABS */
-.tabs{display:flex;gap:0;padding:0 1.5rem;background:#fff;border-bottom:1px solid #eee}
-.tab{padding:.85rem 1.4rem;font-size:.88rem;font-weight:600;color:#aaa;cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.tabs{display:flex;gap:0;padding:0 2rem;background:#fff;border-bottom:2px solid #f0eeff}
+.tab{padding:.85rem 1.4rem;font-size:.85rem;font-weight:600;color:#bbb;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-2px;transition:.2s;display:flex;align-items:center;gap:6px}
 .tab.active{color:#7c3aed;border-bottom-color:#7c3aed}
-.tab:hover:not(.active){color:#555}
+.tab:hover:not(.active){color:#666}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;padding:1.5rem;background:#f4f6fb}
-.stat-card{background:#fff;border:1px solid #e8e8f8;border-radius:16px;padding:1.2rem 1.4rem;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-.stat-card .num{font-size:2rem;font-weight:900;color:#7c3aed;line-height:1}
-.stat-card .lbl{font-size:.75rem;color:#999;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
-.stat-card .sub{font-size:.8rem;color:#bbb;margin-top:2px}
+/* STATS CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;padding:1.5rem 2rem;background:#f7f7fc}
+.stat-card{background:#fff;border:1.5px solid #eeecff;border-radius:18px;padding:1.3rem 1.4rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);transition:.2s}
+.stat-card:hover{border-color:#c4b5fd;box-shadow:0 4px 16px rgba(124,58,237,.1)}
+.stat-card .num{font-size:2rem;font-weight:900;color:#7c3aed;line-height:1;letter-spacing:-.03em}
+.stat-card .lbl{font-size:.72rem;color:#999;margin-top:5px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.stat-card .sub{font-size:.75rem;color:#ccc;margin-top:2px}
+
+/* TABLE AREA */
+.table-wrap{padding:0 2rem 2rem}
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0 .9rem}
+.section-title{font-size:1rem;font-weight:700;color:#1a1a2e}
+.add-btn{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:12px;
+  padding:.6rem 1.2rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;
+  box-shadow:0 2px 12px rgba(124,58,237,.3);transition:.2s;display:flex;align-items:center;gap:6px}
+.add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,.4)}
+
+/* SEARCH */
+.search-row{display:flex;gap:.8rem;padding:1.2rem 2rem 0;align-items:center}
+.search-inp{flex:1;background:#fff;border:1.5px solid #ebe8ff;border-radius:12px;
+  padding:.7rem 1rem;color:#1a1a2e;font-family:inherit;font-size:.9rem;outline:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);transition:.2s}
+.search-inp:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(124,58,237,.08)}
+.search-inp::placeholder{color:#ccc}
 
 /* TABLE */
-.table-wrap{padding:0 1.5rem 2rem;overflow-x:auto}
-.section-head{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0 1rem}
-.section-title{font-size:1rem;font-weight:700;color:#333}
-.add-btn{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:10px;padding:.55rem 1.1rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
-table{width:100%;border-collapse:collapse;font-size:.88rem;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.05)}
-thead th{text-align:left;color:#999;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:.9rem 1rem;border-bottom:1px solid #f0f0f8;background:#fafafe}
+table{width:100%;border-collapse:collapse;font-size:.87rem;background:#fff;
+  border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.06);border:1.5px solid #eeecff}
+thead th{text-align:left;color:#aaa;font-size:.7rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;padding:.9rem 1.1rem;border-bottom:1.5px solid #f0eeff;background:#faf9ff}
 tbody tr{border-bottom:1px solid #f5f5fc;transition:.15s}
+tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:#faf8ff}
-td{padding:.9rem 1rem;color:#444}
-td .name{font-weight:700;color:#1a1a2e;font-size:.92rem}
-td .sub{font-size:.78rem;color:#aaa;margin-top:2px}
+td{padding:.9rem 1.1rem;color:#555}
+td .name{font-weight:700;color:#0f0f1f;font-size:.9rem}
+td .sub{font-size:.76rem;color:#bbb;margin-top:2px}
+
+/* AVATAR */
+.av{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#ede9ff,#ddd6fe);
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800;
+  font-size:.8rem;color:#7c3aed;flex-shrink:0}
+.client-cell{display:flex;align-items:center;gap:10px}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;letter-spacing:.03em}
-.badge-aktiv{background:#e6faf6;color:#059669;border:1px solid #a7f3d0}
-.badge-setup{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
-.badge-pause{background:#fff5f5;color:#dc2626;border:1px solid #fecaca}
-.badge-neu{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
-.badge-pro{background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe}
-.badge-komplett{background:#e6faf6;color:#059669;border:1px solid #a7f3d0}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.badge-aktiv{background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0}
+.badge-setup{background:#fffbeb;color:#d97706;border:1.5px solid #fde68a}
+.badge-pause{background:#fff1f2;color:#e11d48;border:1.5px solid #fecdd3}
+.badge-neu{background:#f5f3ff;color:#7c3aed;border:1.5px solid #ddd6fe}
+.badge-professional{background:#f5f3ff;color:#7c3aed;border:1.5px solid #ddd6fe}
+.badge-komplett{background:#ecfdf5;color:#059669;border:1.5px solid #a7f3d0}
 
 /* ROW ACTIONS */
-.row-actions{display:flex;gap:6px;align-items:center}
-.ra{background:#f8f8ff;border:1px solid #e8e8f8;color:#666;border-radius:7px;padding:4px 10px;font-size:.78rem;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
-.ra:hover{background:#ede9ff;border-color:#c4b5fd;color:#7c3aed}
+.row-actions{display:flex;gap:5px;align-items:center}
+.ra{background:#f8f6ff;border:1.5px solid #ede9ff;color:#7c3aed;border-radius:8px;
+  padding:4px 10px;font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.ra:hover{background:#ede9ff;border-color:#c4b5fd}
+.ra.red{border-color:#fecdd3;color:#dc2626;background:#fff1f2}
+.ra.red:hover{background:#fee2e2}
 .ra.green{border-color:#a7f3d0;color:#059669;background:#f0fdf9}
 .ra.green:hover{background:#d1fae5}
-.ra.red{border-color:#fecaca;color:#dc2626;background:#fff5f5}
-.ra.red:hover{background:#fee2e2}
 
 /* MODAL */
-#modalOverlay{position:fixed;inset:0;background:rgba(100,100,120,.4);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(6px)}
+#modalOverlay{position:fixed;inset:0;background:rgba(15,10,40,.5);z-index:200;display:none;
+  align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px)}
 #modalOverlay.open{display:flex}
-.modal{background:#fff;border:1px solid #e8e8f8;border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.mh{padding:1.3rem 1.5rem;border-bottom:1px solid #f0f0f8;display:flex;justify-content:space-between;align-items:center}
-.mh h2{font-size:1rem;font-weight:800;color:#1a1a2e}
-.mclose{background:none;border:none;color:#bbb;font-size:1.3rem;cursor:pointer;line-height:1}
+.modal{background:#fff;border:1.5px solid #eeecff;border-radius:24px;width:100%;max-width:520px;
+  max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.18)}
+.mh{padding:1.3rem 1.6rem;border-bottom:1.5px solid #f0eeff;display:flex;justify-content:space-between;align-items:center;background:#faf9ff;border-radius:24px 24px 0 0}
+.mh h2{font-size:1rem;font-weight:800;color:#0f0f1f}
+.mclose{background:none;border:none;color:#ccc;font-size:1.4rem;cursor:pointer;line-height:1;transition:.2s}
 .mclose:hover{color:#333}
-.mbody{padding:1.3rem 1.5rem}
-.fl{font-size:.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:14px}
-.fi{width:100%;background:#f8f8ff;border:1px solid #e8e8f0;border-radius:10px;padding:.8rem 1rem;color:#1a1a2e;font-family:inherit;font-size:.95rem;outline:none}
-.fi:focus{border-color:#a78bfa;background:#fff}
-select.fi option{background:#fff;color:#1a1a2e}
-.mbtns{display:flex;gap:.6rem;padding:1rem 1.5rem;border-top:1px solid #f0f0f8}
-.mb{flex:1;padding:.8rem;border-radius:10px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
-.mb-p{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none}
-.mb-p:hover{opacity:.9}
-.mb-g{background:#f5f5ff;border:1px solid #e0e0f0;color:#888}
+.mbody{padding:1.3rem 1.6rem}
+.fl{font-size:.72rem;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;margin-top:16px}
+.fi{width:100%;background:#f9f9ff;border:1.5px solid #ebe8ff;border-radius:12px;
+  padding:.8rem 1rem;color:#1a1a2e;font-family:inherit;font-size:.92rem;outline:none;transition:.2s}
+.fi:focus{border-color:#a78bfa;background:#fff;box-shadow:0 0 0 3px rgba(124,58,237,.08)}
+select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.mbtns{display:flex;gap:.7rem;padding:1rem 1.6rem 1.4rem;border-top:1.5px solid #f0eeff}
+.mb{flex:1;padding:.85rem;border-radius:12px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
+.mb-p{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;box-shadow:0 2px 12px rgba(124,58,237,.3)}
+.mb-p:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,.4)}
+.mb-g{background:#f8f6ff;border:1.5px solid #ebe8ff;color:#888}
 .mb-g:hover{background:#ede9ff;color:#555}
 
 /* DETAIL */
-.detail-section{margin-bottom:1.5rem}
-.detail-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid #f5f5fc;font-size:.88rem}
-.detail-row .dk{color:#999}
-.detail-row .dv{color:#1a1a2e;font-weight:500;text-align:right}
+.detail-section{margin-bottom:1.2rem}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid #f5f5fc;font-size:.87rem}
+.detail-row:last-child{border-bottom:none}
+.detail-row .dk{color:#bbb;font-weight:500}
+.detail-row .dv{color:#0f0f1f;font-weight:600;text-align:right}
 
 /* EMPTY */
-.empty{text-align:center;padding:4rem 1rem;color:#ccc}
-.empty div:first-child{font-size:2.5rem;margin-bottom:.8rem}
+.empty{text-align:center;padding:4rem 1rem;color:#ddd}
+.empty div:first-child{font-size:2.8rem;margin-bottom:.8rem}
+.empty div{font-size:.9rem}
+
+/* ACTIVE BOTS */
+.bot-row{display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid #f5f5fc}
+.bot-row:last-child{border-bottom:none}
 
 /* TOAST */
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#fff;border:1px solid #ddd6fe;border-radius:12px;padding:.8rem 1.2rem;font-size:.88rem;color:#7c3aed;z-index:500;animation:tin .25s ease;box-shadow:0 8px 30px rgba(124,58,237,.15);pointer-events:none}
-@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-/* SEARCH */
-.search-row{display:flex;gap:.8rem;padding:1rem 1.5rem 0;align-items:center}
-.search-inp{flex:1;background:#fff;border:1px solid #e8e8f0;border-radius:10px;padding:.65rem 1rem;color:#1a1a2e;font-family:inherit;font-size:.9rem;outline:none;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-.search-inp:focus{border-color:#a78bfa}
-.search-inp::placeholder{color:#bbb}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#fff;border:1.5px solid #ddd6fe;
+  border-radius:14px;padding:.8rem 1.3rem;font-size:.87rem;color:#7c3aed;z-index:500;
+  animation:tin .25s ease;box-shadow:0 8px 30px rgba(124,58,237,.15);pointer-events:none;font-weight:600}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -117,22 +172,25 @@ select.fi option{background:#fff;color:#1a1a2e}
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div style="font-size:2rem;margin-bottom:.5rem">🛸</div>
+    <div class="login-icon">🛸</div>
     <h1>Xyphone Admin</h1>
     <p>Nur für interne Nutzung</p>
     <input type="text" id="lu" placeholder="Benutzername" onkeydown="if(event.key==='Enter')document.getElementById('lp').focus()"/>
     <input type="password" id="lp" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()"/>
     <button class="login-btn" onclick="doLogin()">Einloggen →</button>
-    <div class="err" id="le">❌ Falsches Passwort</div>
+    <div class="err" id="le">Falsches Passwort</div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="app">
   <div class="header">
-    <div class="logo">XYPHONE <span>Admin Panel</span></div>
-    <div style="display:flex;gap:8px">
-      <span style="font-size:.8rem;color:rgba(255,255,255,.25);align-self:center" id="lastSync"></span>
+    <div class="logo">
+      <div class="logo-mark">🤖</div>
+      <div class="logo-text">XYPHONE <span>Admin Panel</span></div>
+    </div>
+    <div class="header-right">
+      <span id="lastSync"></span>
       <button class="hbtn" onclick="loadAll()">↻ Refresh</button>
       <button class="hbtn red" onclick="logout()">Abmelden</button>
     </div>
@@ -148,7 +206,7 @@ select.fi option{background:#fff;color:#1a1a2e}
   <!-- TAB: KUNDEN -->
   <div id="tab-kunden">
     <div class="search-row">
-      <input class="search-inp" id="searchInp" placeholder="Kunde suchen..." oninput="renderClients()"/>
+      <input class="search-inp" id="searchInp" placeholder="🔍  Kunde suchen..." oninput="renderClients()"/>
       <button class="add-btn" onclick="openAddClient()">+ Neuer Kunde</button>
     </div>
     <div class="table-wrap">
@@ -209,7 +267,6 @@ const ADMIN = { user: 'admin', pass: 'xyphone2026' };
 let clients = [], orders = [];
 let editingId = null;
 
-// ── AUTH ──────────────────────────────────────────────
 function doLogin() {
   const u = document.getElementById('lu').value.trim();
   const p = document.getElementById('lp').value.trim();
@@ -228,77 +285,76 @@ function logout() {
   document.getElementById('lp').value = '';
 }
 
-// ── SUPABASE ──────────────────────────────────────────
-async function sbGet(table, params = '') {
+async function sbGet(table, params='') {
   const res = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
-    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' }
+    headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json'}
   });
   return res.json();
 }
 async function sbPost(table, data) {
   return fetch(`${SB_URL}/rest/v1/${table}`, {
-    method: 'POST', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
-    body: JSON.stringify(data)
-  }).then(r => r.json());
+    method:'POST',
+    headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json',Prefer:'return=representation'},
+    body:JSON.stringify(data)
+  }).then(r=>r.json());
 }
 async function sbPatch(table, id, data) {
   return fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
-    method: 'PATCH', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    method:'PATCH',
+    headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json'},
+    body:JSON.stringify(data)
   });
 }
 async function sbDelete(table, id) {
   return fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
-    method: 'DELETE', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    method:'DELETE',
+    headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`}
   });
 }
 
-// ── LOAD ──────────────────────────────────────────────
 async function loadAll() {
   document.getElementById('lastSync').textContent = 'Lädt...';
   try {
     [clients, orders] = await Promise.all([
-      sbGet('clients', 'order=created_at.desc'),
-      sbGet('orders', 'order=created_at.desc&limit=100').catch(() => [])
+      sbGet('clients','order=created_at.desc'),
+      sbGet('orders','order=created_at.desc&limit=100').catch(()=>[])
     ]);
-    if (!Array.isArray(clients)) clients = [];
-    if (!Array.isArray(orders)) orders = [];
+    if(!Array.isArray(clients)) clients=[];
+    if(!Array.isArray(orders)) orders=[];
     renderClients(); renderOrders(); renderStats();
-    document.getElementById('lastSync').textContent = 'Zuletzt: ' + new Date().toLocaleTimeString('de');
-  } catch(e) {
-    toast('Fehler beim Laden: ' + e.message);
-  }
+    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString('de');
+  } catch(e) { toast('Fehler: '+e.message); }
 }
 
-// ── TABS ──────────────────────────────────────────────
 function showTab(t) {
-  ['kunden','orders','stats'].forEach(id => {
-    document.getElementById('tab-' + id).style.display = id === t ? 'block' : 'none';
-    document.querySelectorAll('.tab').forEach((el, i) => {
-      el.classList.toggle('active', ['kunden','orders','stats'][i] === t);
-    });
+  ['kunden','orders','stats'].forEach((id,i) => {
+    document.getElementById('tab-'+id).style.display = id===t?'block':'none';
+    document.querySelectorAll('.tab')[i].classList.toggle('active', id===t);
   });
 }
 
-// ── CLIENTS RENDER ────────────────────────────────────
+function initials(name) {
+  return (name||'?').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
 function renderClients() {
-  const q = (document.getElementById('searchInp')?.value || '').toLowerCase();
-  const filtered = clients.filter(c =>
-    !q || (c.business_name||'').toLowerCase().includes(q) || (c.username||'').toLowerCase().includes(q)
-  );
-  const tbody = document.getElementById('clientsTbody');
-  const empty = document.getElementById('clientsEmpty');
-  if (!filtered.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = filtered.map(c => {
-    const status = c.status || 'aktiv';
-    const plan = c.plan || 'professional';
-    const date = c.created_at ? new Date(c.created_at).toLocaleDateString('de') : '—';
+  const q=(document.getElementById('searchInp')?.value||'').toLowerCase();
+  const filtered=clients.filter(c=>!q||(c.business_name||'').toLowerCase().includes(q)||(c.username||'').toLowerCase().includes(q));
+  const tbody=document.getElementById('clientsTbody');
+  const empty=document.getElementById('clientsEmpty');
+  if(!filtered.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=filtered.map(c=>{
+    const status=c.status||'aktiv';
+    const plan=c.plan||'professional';
     return `<tr>
-      <td><div class="name">${c.business_name || '—'}</div><div class="sub">@${c.username}</div></td>
-      <td><div style="font-size:.85rem;color:#555">${c.phone ? `<a href="tel:${c.phone}" style="color:#7c3aed;text-decoration:none">${c.phone}</a>` : '<span style="color:#ccc">—</span>'}</div></td>
+      <td><div class="client-cell">
+        <div class="av">${initials(c.business_name)}</div>
+        <div><div class="name">${c.business_name||'—'}</div><div class="sub">@${c.username}</div></div>
+      </div></td>
+      <td>${c.phone?`<a href="tel:${c.phone}" style="color:#7c3aed;text-decoration:none;font-weight:600">${c.phone}</a>`:'<span style="color:#ddd">—</span>'}</td>
       <td><span class="badge badge-${plan.toLowerCase()}">${plan}</span></td>
-      <td><span class="badge badge-${status}">${status}</span></td>
+      <td><span class="badge badge-${status}">${status==='aktiv'?'● aktiv':status==='setup'?'⏳ setup':'⏸ '+status}</span></td>
       <td><div class="row-actions">
         <button class="ra" onclick="viewClient(${c.id})">Details</button>
         <button class="ra" onclick="editClient(${c.id})">✎ Edit</button>
@@ -309,74 +365,76 @@ function renderClients() {
 }
 
 function viewClient(id) {
-  const c = clients.find(x => x.id === id);
-  if (!c) return;
-  const date = c.created_at ? new Date(c.created_at).toLocaleString('de') : '—';
-  document.getElementById('modalTitle').textContent = c.business_name || 'Kunde';
-  document.getElementById('modalBody').innerHTML = `
+  const c=clients.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('modalTitle').textContent=c.business_name||'Kunde';
+  document.getElementById('modalBody').innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:1.3rem;padding-bottom:1.2rem;border-bottom:1.5px solid #f0eeff">
+      <div class="av" style="width:52px;height:52px;border-radius:16px;font-size:1.1rem">${initials(c.business_name)}</div>
+      <div><div style="font-size:1.1rem;font-weight:800;color:#0f0f1f">${c.business_name||'—'}</div>
+      <div style="color:#aaa;font-size:.85rem;margin-top:2px">@${c.username}</div></div>
+    </div>
     <div class="detail-section">
-      <div class="detail-row"><span class="dk">Benutzername</span><span class="dv">@${c.username}</span></div>
-      <div class="detail-row"><span class="dk">Unternehmen</span><span class="dv">${c.business_name || '—'}</span></div>
       <div class="detail-row"><span class="dk">Status</span><span class="dv"><span class="badge badge-${c.status||'aktiv'}">${c.status||'aktiv'}</span></span></div>
       <div class="detail-row"><span class="dk">Paket</span><span class="dv"><span class="badge badge-${(c.plan||'professional').toLowerCase()}">${c.plan||'Professional'}</span></span></div>
-      <div class="detail-row"><span class="dk">Erstellt</span><span class="dv">${date}</span></div>
-      ${c.phone ? `<div class="detail-row"><span class="dk">Telefon</span><span class="dv">${c.phone}</span></div>` : ''}
-      ${c.email ? `<div class="detail-row"><span class="dk">Email</span><span class="dv">${c.email}</span></div>` : ''}
-      ${c.agent_id ? `<div class="detail-row"><span class="dk">ElevenLabs Agent</span><span class="dv" style="font-size:.78rem;word-break:break-all">${c.agent_id}</span></div>` : ''}
+      ${c.phone?`<div class="detail-row"><span class="dk">Telefon</span><span class="dv">${c.phone}</span></div>`:''}
+      ${c.email?`<div class="detail-row"><span class="dk">Email</span><span class="dv">${c.email}</span></div>`:''}
+      ${c.agent_id?`<div class="detail-row"><span class="dk">Agent ID</span><span class="dv" style="font-size:.75rem;word-break:break-all;max-width:220px">${c.agent_id}</span></div>`:''}
+      <div class="detail-row"><span class="dk">Erstellt</span><span class="dv">${c.created_at?new Date(c.created_at).toLocaleDateString('de'):'—'}</span></div>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="ra green" onclick="setStatus(${c.id},'aktiv')">✅ Aktiv</button>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:.5rem">
+      <button class="ra green" onclick="setStatus(${c.id},'aktiv')">● Aktiv setzen</button>
       <button class="ra" onclick="setStatus(${c.id},'setup')">⏳ Setup</button>
       <button class="ra" onclick="setStatus(${c.id},'pause')">⏸ Pause</button>
     </div>`;
-  document.getElementById('modalBtns').innerHTML = `
+  document.getElementById('modalBtns').innerHTML=`
     <button class="mb mb-g" onclick="closeModal()">Schließen</button>
     <button class="mb mb-p" onclick="editClient(${c.id})">Bearbeiten</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
 function openAddClient() {
-  editingId = null;
-  document.getElementById('modalTitle').textContent = 'Neuer Kunde';
-  document.getElementById('modalBody').innerHTML = clientForm({});
-  document.getElementById('modalBtns').innerHTML = `
+  editingId=null;
+  document.getElementById('modalTitle').textContent='Neuer Kunde';
+  document.getElementById('modalBody').innerHTML=clientForm({});
+  document.getElementById('modalBtns').innerHTML=`
     <button class="mb mb-g" onclick="closeModal()">Abbrechen</button>
     <button class="mb mb-p" onclick="saveClient()">Speichern →</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
 function editClient(id) {
-  editingId = id;
-  const c = clients.find(x => x.id === id);
-  if (!c) return;
-  document.getElementById('modalTitle').textContent = 'Bearbeiten: ' + c.business_name;
-  document.getElementById('modalBody').innerHTML = clientForm(c);
-  document.getElementById('modalBtns').innerHTML = `
+  editingId=id;
+  const c=clients.find(x=>x.id===id);
+  if(!c) return;
+  document.getElementById('modalTitle').textContent='Bearbeiten: '+c.business_name;
+  document.getElementById('modalBody').innerHTML=clientForm(c);
+  document.getElementById('modalBtns').innerHTML=`
     <button class="mb mb-g" onclick="closeModal()">Abbrechen</button>
     <button class="mb mb-p" onclick="saveClient()">Speichern →</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
 function genPass() {
-  const w = ['Bot','Xyph','Nova','Call','Tech','Link','Flow'];
-  const n = Math.floor(1000 + Math.random() * 9000);
-  const s = ['!','#','@','*'][Math.floor(Math.random()*4)];
-  return w[Math.floor(Math.random()*w.length)] + w[Math.floor(Math.random()*w.length)] + n + s;
+  const w=['Bot','Xyph','Nova','Call','Tech','Link','Flow'];
+  const n=Math.floor(1000+Math.random()*9000);
+  const s=['!','#','@','*'][Math.floor(Math.random()*4)];
+  return w[Math.floor(Math.random()*w.length)]+w[Math.floor(Math.random()*w.length)]+n+s;
 }
 function genUser(biz) {
-  return (biz||'kunde').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,18) + '_' + Math.floor(10+Math.random()*90);
+  return (biz||'kunde').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,18)+'_'+Math.floor(10+Math.random()*90);
 }
 
 function clientForm(c) {
-  const isNew = !editingId;
-  const autoPass = isNew ? genPass() : '';
+  const isNew=!editingId;
+  const autoPass=isNew?genPass():'';
   return `
     <div class="fl">Unternehmensname</div>
     <input class="fi" id="fBiz" value="${c.business_name||''}" placeholder="Pizzeria Muster" oninput="if(!document.getElementById('fUser')._touched)document.getElementById('fUser').value=genUser(this.value)"/>
     <div class="fl">Benutzername</div>
     <div style="display:flex;gap:6px">
       <input class="fi" id="fUser" value="${c.username||''}" placeholder="pizzeria_muster" style="flex:1" oninput="this._touched=true"/>
-      ${isNew ? `<button type="button" onclick="document.getElementById('fUser').value=genUser(document.getElementById('fBiz').value)" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);border-radius:8px;padding:0 12px;font-size:.8rem;cursor:pointer">↻</button>` : ''}
+      ${isNew?`<button type="button" onclick="document.getElementById('fUser').value=genUser(document.getElementById('fBiz').value)" style="background:#f8f6ff;border:1.5px solid #ebe8ff;color:#7c3aed;border-radius:10px;padding:0 12px;font-size:.85rem;cursor:pointer;font-weight:600">↻</button>`:''}
     </div>
     <div class="fl">Email</div>
     <input class="fi" id="fEmail" type="email" value="${c.email||''}" placeholder="kunde@email.de"/>
@@ -395,98 +453,96 @@ function clientForm(c) {
     </select>
     <div class="fl">ElevenLabs Agent ID</div>
     <input class="fi" id="fAgent" value="${c.agent_id||''}" placeholder="agent_xxx..."/>
-    <div class="fl">Passwort ${editingId ? '(leer = unverändert)' : '— auto generiert'}</div>
+    <div class="fl">Passwort ${editingId?'(leer = unverändert)':'— auto generiert'}</div>
     <div style="display:flex;gap:6px">
       <input class="fi" id="fPass" value="${autoPass}" placeholder="Passwort" style="flex:1;font-family:monospace"/>
-      <button type="button" onclick="document.getElementById('fPass').value=genPass()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);border-radius:8px;padding:0 12px;font-size:.8rem;cursor:pointer">↻</button>
+      <button type="button" onclick="document.getElementById('fPass').value=genPass()" style="background:#f8f6ff;border:1.5px solid #ebe8ff;color:#7c3aed;border-radius:10px;padding:0 12px;font-size:.85rem;cursor:pointer;font-weight:600">↻</button>
     </div>
-    ${isNew ? `<div style="margin-top:12px;background:rgba(0,196,140,.07);border:1px solid rgba(0,196,140,.2);border-radius:10px;padding:.9rem 1rem">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.85rem;color:rgba(255,255,255,.6)">
-        <input type="checkbox" id="fSendMail" checked style="accent-color:#00c48c;width:15px;height:15px"/>
+    ${isNew?`<div style="margin-top:14px;background:#f0fdf9;border:1.5px solid #a7f3d0;border-radius:12px;padding:.9rem 1rem">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.85rem;color:#555;font-weight:500">
+        <input type="checkbox" id="fSendMail" checked style="accent-color:#059669;width:15px;height:15px"/>
         ✉️ Zugangsdaten automatisch an Kunden mailen
       </label>
-    </div>` : ''}`;
+    </div>`:''}`;
 }
 
 async function saveClient() {
-  const username = document.getElementById('fUser').value.trim();
-  const business_name = document.getElementById('fBiz').value.trim();
-  const email = document.getElementById('fEmail').value.trim();
-  if (!username || !business_name) { toast('❌ Name + Benutzername Pflicht'); return; }
-  const pass = document.getElementById('fPass').value.trim();
-  const data = {
-    username, business_name,
-    email: email || null,
-    phone: document.getElementById('fPhone').value.trim() || null,
-    plan: document.getElementById('fPlan').value,
-    status: document.getElementById('fStatus').value,
-    agent_id: document.getElementById('fAgent').value.trim() || null,
+  const username=document.getElementById('fUser').value.trim();
+  const business_name=document.getElementById('fBiz').value.trim();
+  const email=document.getElementById('fEmail').value.trim();
+  if(!username||!business_name){toast('❌ Name + Benutzername Pflicht');return;}
+  const pass=document.getElementById('fPass').value.trim();
+  const data={
+    username,business_name,
+    email:email||null,
+    phone:document.getElementById('fPhone').value.trim()||null,
+    plan:document.getElementById('fPlan').value,
+    status:document.getElementById('fStatus').value,
+    agent_id:document.getElementById('fAgent').value.trim()||null,
   };
-  if (editingId) {
-    if (pass) data.password_hash = pass;
-    await sbPatch('clients', editingId, data);
+  if(editingId) {
+    if(pass) data.password_hash=pass;
+    await sbPatch('clients',editingId,data);
     toast('✅ Kunde aktualisiert');
-    closeModal(); loadAll();
+    closeModal();loadAll();
   } else {
-    if (!pass) { toast('❌ Passwort Pflicht'); return; }
-    data.password_hash = pass;
-    await sbPost('clients', data);
-    const sendMail = document.getElementById('fSendMail')?.checked;
-    if (sendMail && email) {
+    if(!pass){toast('❌ Passwort Pflicht');return;}
+    data.password_hash=pass;
+    await sbPost('clients',data);
+    const sendMail=document.getElementById('fSendMail')?.checked;
+    if(sendMail&&email) {
       try {
-        const fd = new FormData();
-        fd.append('access_key', '57ca5d37-2f8b-4887-9910-b246aaa191df');
-        fd.append('subject', `Ihre Xyphone Zugangsdaten — ${business_name}`);
-        fd.append('from_name', 'Xyphone Team');
-        fd.append('replyto', 'xypherxai@gmail.com');
-        fd.append('email', email);
-        fd.append('message', `Hallo,\n\nwillkommen bei Xyphone!\n\nIhre Zugangsdaten:\n\nDashboard: https://xypherxai-sudo.github.io/xyphone-dashboard/\nBenutzername: ${username}\nPasswort: ${pass}\n\nBei Fragen: xypherxai@gmail.com\n\nIhr Xyphone Team`);
-        await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
-      } catch(e) {}
+        const fd=new FormData();
+        fd.append('access_key','57ca5d37-2f8b-4887-9910-b246aaa191df');
+        fd.append('subject',`Ihre Xyphone Zugangsdaten — ${business_name}`);
+        fd.append('from_name','Xyphone Team');
+        fd.append('replyto','xypherxai@gmail.com');
+        fd.append('email',email);
+        fd.append('message',`Hallo,\n\nwillkommen bei Xyphone!\n\nIhre Zugangsdaten:\n\nDashboard: https://xypherxai-sudo.github.io/xyphone-dashboard/\nBenutzername: ${username}\nPasswort: ${pass}\n\nBei Fragen: xypherxai@gmail.com\n\nIhr Xyphone Team`);
+        await fetch('https://api.web3forms.com/submit',{method:'POST',body:fd});
+      } catch(e){}
     }
     closeModal();
-    // Zugangsdaten anzeigen
-    document.getElementById('modalTitle').textContent = '🔑 Zugangsdaten';
-    document.getElementById('modalBody').innerHTML = `
-      <div style="background:rgba(0,196,140,.07);border:1px solid rgba(0,196,140,.2);border-radius:12px;padding:1.3rem;margin-bottom:1rem">
-        <div style="font-size:.72rem;color:#00c48c;font-weight:700;letter-spacing:.08em;margin-bottom:12px">ZUGANGSDATEN — BITTE NOTIEREN</div>
-        <div style="font-family:monospace;font-size:.95rem;line-height:2.2">
-          <div>🌐 <span style="color:rgba(255,255,255,.4)">URL</span>&nbsp;&nbsp; <a href="https://xypherxai-sudo.github.io/xyphone-dashboard/" target="_blank" style="color:#a78bfa">Dashboard öffnen</a></div>
-          <div>👤 <span style="color:rgba(255,255,255,.4)">User</span>&nbsp; <strong>${username}</strong></div>
-          <div>🔑 <span style="color:rgba(255,255,255,.4)">Pass</span>&nbsp; <strong style="font-size:1.05rem;color:#fff">${pass}</strong></div>
+    document.getElementById('modalTitle').textContent='🔑 Zugangsdaten';
+    document.getElementById('modalBody').innerHTML=`
+      <div style="background:linear-gradient(135deg,#f0fdf9,#ecfdf5);border:1.5px solid #a7f3d0;border-radius:14px;padding:1.4rem;margin-bottom:1rem">
+        <div style="font-size:.7rem;color:#059669;font-weight:800;letter-spacing:.09em;margin-bottom:12px;text-transform:uppercase">✓ Zugangsdaten — Bitte notieren</div>
+        <div style="font-family:monospace;font-size:.95rem;line-height:2.3">
+          <div>🌐 <span style="color:#aaa">URL</span>&nbsp;&nbsp; <a href="https://xypherxai-sudo.github.io/xyphone-dashboard/" target="_blank" style="color:#7c3aed;font-weight:700">Dashboard öffnen ↗</a></div>
+          <div>👤 <span style="color:#aaa">User</span>&nbsp; <strong style="color:#0f0f1f">${username}</strong></div>
+          <div>🔑 <span style="color:#aaa">Pass</span>&nbsp; <strong style="font-size:1.1rem;color:#7c3aed">${pass}</strong></div>
         </div>
       </div>
-      ${sendMail && email ? `<div style="color:#00c48c;font-size:.85rem">✉️ Zugangsdaten wurden an ${email} gesendet</div>` : '<div style="color:rgba(255,255,255,.3);font-size:.82rem">⚠️ Keine Email angegeben — Zugangsdaten manuell weitergeben</div>'}`;
-    document.getElementById('modalBtns').innerHTML = `<button class="mb mb-p" onclick="closeModal()">OK, verstanden ✓</button>`;
+      ${sendMail&&email?`<div style="color:#059669;font-size:.85rem;font-weight:600">✉️ Zugangsdaten wurden an ${email} gesendet</div>`:'<div style="color:#bbb;font-size:.82rem">⚠️ Keine Email — Zugangsdaten manuell weitergeben</div>'}`;
+    document.getElementById('modalBtns').innerHTML=`<button class="mb mb-p" onclick="closeModal()">OK, verstanden ✓</button>`;
     document.getElementById('modalOverlay').classList.add('open');
     loadAll();
   }
 }
 
-async function setStatus(id, status) {
-  await sbPatch('clients', id, { status });
-  toast('Status → ' + status); closeModal(); loadAll();
+async function setStatus(id,status) {
+  await sbPatch('clients',id,{status});
+  toast('Status → '+status);closeModal();loadAll();
 }
 
-async function deleteClient(id, name) {
-  if (!confirm(`"${name}" wirklich löschen?`)) return;
-  await sbDelete('clients', id);
-  toast('🗑️ Gelöscht'); loadAll();
+async function deleteClient(id,name) {
+  if(!confirm(`"${name}" wirklich löschen?`)) return;
+  await sbDelete('clients',id);
+  toast('🗑️ Gelöscht');loadAll();
 }
 
-// ── ORDERS RENDER ─────────────────────────────────────
 function renderOrders() {
-  const tbody = document.getElementById('ordersTbody');
-  const empty = document.getElementById('ordersEmpty');
-  if (!orders.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = orders.map(o => {
-    const date = o.created_at ? new Date(o.created_at).toLocaleDateString('de') : '—';
-    const status = o.status || 'neu';
+  const tbody=document.getElementById('ordersTbody');
+  const empty=document.getElementById('ordersEmpty');
+  if(!orders.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=orders.map(o=>{
+    const date=o.created_at?new Date(o.created_at).toLocaleDateString('de'):'—';
+    const status=o.status||'neu';
     return `<tr>
-      <td><div class="name">${o.business_name || o.biz_name || '—'}</div><div class="sub">${o.city||''}</div></td>
-      <td>${o.branche || '—'}</td>
-      <td><div>${o.contact_name || o.name || '—'}</div><div class="sub">${o.contact_email || o.email || ''}</div></td>
+      <td><div class="name">${o.business_name||o.biz_name||'—'}</div><div class="sub">${o.city||''}</div></td>
+      <td>${o.branche||'—'}</td>
+      <td><div>${o.contact_name||o.name||'—'}</div><div class="sub">${o.contact_email||o.email||''}</div></td>
       <td><span class="badge badge-${status}">${status}</span></td>
       <td>${date}</td>
       <td><div class="row-actions">
@@ -497,36 +553,35 @@ function renderOrders() {
   }).join('');
 }
 
-async function setOrderStatus(id, status) {
-  await sbPatch('orders', id, { status });
-  toast('Status aktualisiert'); loadAll();
+async function setOrderStatus(id,status) {
+  await sbPatch('orders',id,{status});
+  toast('Status aktualisiert');loadAll();
 }
 
-// ── STATS ─────────────────────────────────────────────
 function renderStats() {
-  const aktiv = clients.filter(c => c.status === 'aktiv' || !c.status).length;
-  const setup = clients.filter(c => c.status === 'setup').length;
-  const mrrPro = clients.filter(c => (c.plan||'professional') === 'professional').length * 99;
-  const mrrKomp = clients.filter(c => c.plan === 'komplett').length * 149;
-  document.getElementById('statsRow').innerHTML = `
+  const aktiv=clients.filter(c=>c.status==='aktiv'||!c.status).length;
+  const setup=clients.filter(c=>c.status==='setup').length;
+  const mrrPro=clients.filter(c=>(c.plan||'professional')==='professional').length*99;
+  const mrrKomp=clients.filter(c=>c.plan==='komplett').length*149;
+  document.getElementById('statsRow').innerHTML=`
     <div class="stat-card"><div class="num">${clients.length}</div><div class="lbl">Kunden gesamt</div></div>
     <div class="stat-card"><div class="num">${aktiv}</div><div class="lbl">Aktive Bots</div></div>
     <div class="stat-card"><div class="num">${setup}</div><div class="lbl">In Setup</div></div>
-    <div class="stat-card"><div class="num">€${mrrPro + mrrKomp}</div><div class="lbl">MRR / Monat</div><div class="sub">Recurring Revenue</div></div>
+    <div class="stat-card"><div class="num">€${mrrPro+mrrKomp}</div><div class="lbl">MRR / Monat</div><div class="sub">Recurring Revenue</div></div>
     <div class="stat-card"><div class="num">${orders.length}</div><div class="lbl">Anfragen gesamt</div></div>`;
-  document.getElementById('activeBots').innerHTML = clients.filter(c => c.status === 'aktiv' || !c.status).map(c => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.05)">
-      <div><div style="font-weight:700">${c.business_name}</div><div style="font-size:.78rem;color:rgba(255,255,255,.3)">@${c.username} · ${c.plan||'professional'}</div></div>
-      <span class="badge badge-aktiv">Live 🟢</span>
-    </div>`).join('') || '<div class="empty"><div>🤖</div><div>Noch keine aktiven Bots</div></div>';
+  document.getElementById('activeBots').innerHTML=clients.filter(c=>c.status==='aktiv'||!c.status).map(c=>`
+    <div class="bot-row">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="av">${initials(c.business_name)}</div>
+        <div><div style="font-weight:700;color:#0f0f1f">${c.business_name}</div>
+        <div style="font-size:.76rem;color:#bbb">@${c.username} · ${c.plan||'professional'}</div></div>
+      </div>
+      <span class="badge badge-aktiv">● Live</span>
+    </div>`).join('')||'<div class="empty"><div>🤖</div><div>Noch keine aktiven Bots</div></div>';
 }
 
-// ── UTILS ─────────────────────────────────────────────
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editingId = null; }
-function toast(msg) {
-  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2800);
-}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');editingId=null;}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800);}
 </script>
 </body>
 </html>
