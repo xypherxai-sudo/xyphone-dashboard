@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Xyphone Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1f2f1d78-0aca-4f2a-8c5f-061b997f3641",
+        serviceWorkerPath: "/xyphone-dashboard/OneSignalSDKWorker.js",
+        notifyButton: { enable: false },
+        allowLocalhostAsSecureOrigin: true
+      });
+    });
+  </script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Inter', -apple-system, sans-serif; background:#0a0a18; color:white; min-height:100vh; }
@@ -478,9 +490,25 @@ function ringBell() {
 }
 
 function requestNotificationPermission() {
-  if ('Notification' in window && Notification.permission === 'default') {
+  // OneSignal Push anfordern
+  if (window.OneSignalDeferred) {
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.Notifications.requestPermission();
+    });
+  } else if ('Notification' in window && Notification.permission === 'default') {
     Notification.requestPermission();
   }
+}
+
+async function sendPushNotification(msg) {
+  // Via Supabase Edge Function senden (vermeidet CORS + versteckt API Key)
+  try {
+    await fetch('https://llrnusfadlazswgudxjt.supabase.co/functions/v1/send-push', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
+      body: JSON.stringify({ message: msg, restaurant_id: currentUser?.rid })
+    });
+  } catch(e) {}
 }
 </script>
 </body>
