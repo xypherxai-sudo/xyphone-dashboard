@@ -8,7 +8,7 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#f0f0ff 0%,#e8eaf6 100%);
+  background:linear-gradient(135deg,#f0f0ff,#e8eaf6);
   min-height:100vh;
   display:flex;
   flex-direction:column;
@@ -17,7 +17,6 @@ body {
   padding:1.5rem;
   gap:1.2rem;
 }
-
 .card {
   background:#fff;
   border-radius:20px;
@@ -26,108 +25,49 @@ body {
   width:100%;
   box-shadow:0 4px 24px rgba(0,0,0,.08);
 }
-
 .store-header { text-align:center; margin-bottom:1.2rem; }
 .store-icon { font-size:2.5rem; margin-bottom:.4rem; }
 .store-name { font-size:1.4rem; font-weight:900; color:#1a1a2e; }
 .store-sub { color:#888; font-size:.85rem; margin-top:.2rem; }
-
 .info-row { display:flex; align-items:center; gap:10px; padding:.5rem 0; font-size:.88rem; color:#555; border-bottom:1px solid #f5f5f5; }
 .info-row:last-child { border:none; }
 
-/* CALL CARD */
 .call-card { text-align:center; }
-.call-title { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#aaa; margin-bottom:1.2rem; }
+.call-title { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#aaa; margin-bottom:1.4rem; }
 
-.status-indicator {
+/* Wrapper für das Widget — macht es groß und zentriert */
+.widget-wrapper {
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  gap:8px;
-  margin-bottom:1.5rem;
-  font-size:.88rem;
-  color:#888;
-  min-height:30px;
+  gap:1rem;
 }
-.dot {
-  width:10px; height:10px;
-  border-radius:50%;
-  background:#ddd;
-  flex-shrink:0;
-}
-.dot.connecting { background:#f59e0b; animation:blink 1s infinite; }
-.dot.active { background:#00c48c; animation:pulse 1.5s infinite; }
-.dot.ended { background:#f87171; }
 
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-.btn-start {
-  width:100%;
-  padding:1.1rem;
-  background:linear-gradient(135deg,#00c48c,#00a876);
-  color:#fff;
-  border:none;
-  border-radius:14px;
-  font-size:1.05rem;
-  font-weight:700;
-  font-family:inherit;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  box-shadow:0 4px 16px rgba(0,196,140,.3);
-  transition:.2s;
+/* Das ElevenLabs Widget groß skalieren */
+elevenlabs-convai {
+  --el-convai-button-size: 80px;
+  transform: scale(1.4);
+  transform-origin: center;
+  margin: 20px 0;
+  display: block !important;
+  position: static !important;
 }
-.btn-start:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(0,196,140,.4); }
-.btn-start:disabled { background:#ccc; box-shadow:none; cursor:not-allowed; transform:none; }
-
-.btn-end {
-  width:100%;
-  padding:1.1rem;
-  background:linear-gradient(135deg,#f87171,#ef4444);
-  color:#fff;
-  border:none;
-  border-radius:14px;
-  font-size:1.05rem;
-  font-weight:700;
-  font-family:inherit;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  box-shadow:0 4px 16px rgba(239,68,68,.3);
-  transition:.2s;
-  display:none;
-}
-.btn-end:hover { transform:translateY(-1px); }
-
-.transcript-box {
-  display:none;
-  margin-top:1rem;
-  background:#f8f8ff;
-  border-radius:12px;
-  padding:1rem;
-  max-height:180px;
-  overflow-y:auto;
-  text-align:left;
-}
-.msg { font-size:.84rem; line-height:1.7; margin-bottom:2px; }
-.msg.bot { color:#7c3aed; }
-.msg.user { color:#1a1a2e; }
 
 .hint {
   font-size:.78rem;
   color:#bbb;
-  margin-top:.9rem;
-  line-height:1.5;
+  margin-top:.5rem;
+  line-height:1.6;
 }
+.hint em { color:#999; }
 
-/* Hide ElevenLabs default widget */
-elevenlabs-convai {
-  display:none !important;
+.arrow {
+  font-size:1.8rem;
+  animation: bounce 1.5s infinite;
+}
+@keyframes bounce {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(6px); }
 }
 </style>
 </head>
@@ -145,122 +85,33 @@ elevenlabs-convai {
 </div>
 
 <div class="card call-card">
-  <div class="call-title">🎤 Bot testen</div>
+  <div class="call-title">🎤 Jetzt mit dem Bot sprechen</div>
 
-  <div class="status-indicator">
-    <div class="dot" id="dot"></div>
-    <span id="statusText">Bereit zum Gespräch</span>
-  </div>
-
-  <button class="btn-start" id="btnStart" onclick="startCall()">
-    📞 Anruf starten
-  </button>
-  <button class="btn-end" id="btnEnd" onclick="endCall()">
-    📵 Auflegen
-  </button>
-
-  <div class="transcript-box" id="transcript"></div>
-
-  <div class="hint">
-    Teste z.B.:<br>
-    <em>"Ich möchte 2 Döner bestellen, Abholung, Name Thomas"</em>
-    <br>→ Bestellung erscheint sofort im Dashboard
+  <div class="widget-wrapper">
+    <div class="arrow">👇</div>
+    <elevenlabs-convai agent-id="agent_4001kpjn8ex1e2x9fnjr10vk93bp"></elevenlabs-convai>
+    <div class="hint">
+      Auf den <strong>Mikrofon-Button</strong> klicken → Mikrofon erlauben → sprechen<br><br>
+      <em>Teste: "Ich möchte 2 Döner bestellen, Abholung, Name Thomas"</em>
+    </div>
   </div>
 </div>
 
-<!-- ElevenLabs Widget (versteckt, wir triggern es manuell) -->
-<elevenlabs-convai agent-id="agent_4001kpjn8ex1e2x9fnjr10vk93bp" id="widget"></elevenlabs-convai>
-<script src="https://elevenlabs.io/convai-widget/index.js" async></script>
+<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 
 <script>
-let conv = null;
-
-function setStatus(text, type) {
-  document.getElementById('statusText').textContent = text;
-  const dot = document.getElementById('dot');
-  dot.className = 'dot' + (type ? ' ' + type : '');
-}
-
-function addMsg(role, text) {
-  const box = document.getElementById('transcript');
-  box.style.display = 'block';
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.textContent = (role === 'bot' ? '🤖 ' : '👤 ') + text;
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
-}
-
-async function startCall() {
-  const btn = document.getElementById('btnStart');
-  btn.disabled = true;
-  setStatus('Mikrofon wird angefragt...', 'connecting');
-
-  try {
-    await navigator.mediaDevices.getUserMedia({ audio: true });
-  } catch(e) {
-    setStatus('❌ Mikrofon-Zugriff verweigert — bitte erlauben', 'ended');
-    btn.disabled = false;
-    return;
-  }
-
-  setStatus('Verbinde mit Bot...', 'connecting');
-
-  try {
-    // Dynamically load the SDK
-    const mod = await import('https://unpkg.com/@11labs/client@latest/dist/index.esm.js').catch(async () => {
-      return await import('https://cdn.jsdelivr.net/npm/@11labs/client/dist/index.esm.js');
-    });
-
-    const Conversation = mod.Conversation || mod.default?.Conversation;
-
-    conv = await Conversation.startSession({
-      agentId: 'agent_4001kpjn8ex1e2x9fnjr10vk93bp',
-      onConnect: () => {
-        setStatus('Verbunden — sprechen Sie jetzt!', 'active');
-        btn.style.display = 'none';
-        document.getElementById('btnEnd').style.display = 'flex';
-      },
-      onDisconnect: () => {
-        setStatus('Anruf beendet', 'ended');
-        btn.style.display = 'flex';
-        btn.disabled = false;
-        document.getElementById('btnEnd').style.display = 'none';
-        conv = null;
-        setTimeout(() => setStatus('Bereit zum Gespräch', ''), 4000);
-      },
-      onMessage: (msg) => {
-        if (msg?.type === 'agent_response' && msg.agent_response_event?.agent_response)
-          addMsg('bot', msg.agent_response_event.agent_response);
-        if (msg?.type === 'user_transcript' && msg.user_transcription_event?.user_transcript)
-          addMsg('user', msg.user_transcription_event.user_transcript);
-      },
-      onError: (err) => {
-        console.error(err);
-        setStatus('Fehler — bitte Seite neu laden', 'ended');
-        btn.style.display = 'flex';
-        btn.disabled = false;
-        document.getElementById('btnEnd').style.display = 'none';
-      }
-    });
-  } catch(e) {
-    console.error(e);
-    // Fallback: Widget direkt öffnen
-    setStatus('Öffne Widget...', 'connecting');
-    const w = document.getElementById('widget');
-    w.style.display = 'block';
-    w.setAttribute('open', '');
-    btn.disabled = false;
-    setStatus('Widget geöffnet — unten rechts', '');
-  }
-}
-
-async function endCall() {
-  if (conv) {
-    await conv.endSession();
-    conv = null;
-  }
-}
+// Warte bis Widget geladen, dann in die Mitte verschieben
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const w = document.querySelector('elevenlabs-convai');
+    if (w) {
+      // Widget aus fixed position befreien falls nötig
+      w.style.position = 'static';
+      w.style.bottom = 'auto';
+      w.style.right = 'auto';
+    }
+  }, 2000);
+});
 </script>
 </body>
 </html>
