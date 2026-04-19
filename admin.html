@@ -357,12 +357,31 @@ function editClient(id) {
   document.getElementById('modalOverlay').classList.add('open');
 }
 
+function genPass() {
+  const w = ['Bot','Xyph','Nova','Call','Tech','Link','Flow'];
+  const n = Math.floor(1000 + Math.random() * 9000);
+  const s = ['!','#','@','*'][Math.floor(Math.random()*4)];
+  return w[Math.floor(Math.random()*w.length)] + w[Math.floor(Math.random()*w.length)] + n + s;
+}
+function genUser(biz) {
+  return (biz||'kunde').toLowerCase().replace(/[^a-z0-9]/g,'_').replace(/_+/g,'_').slice(0,18) + '_' + Math.floor(10+Math.random()*90);
+}
+
 function clientForm(c) {
+  const isNew = !editingId;
+  const autoPass = isNew ? genPass() : '';
   return `
-    <div class="fl">Benutzername</div><input class="fi" id="fUser" value="${c.username||''}" placeholder="pizzeria_muster"/>
-    <div class="fl">Unternehmensname</div><input class="fi" id="fBiz" value="${c.business_name||''}" placeholder="Pizzeria Muster"/>
-    <div class="fl">Email</div><input class="fi" id="fEmail" type="email" value="${c.email||''}" placeholder="kunde@email.de"/>
-    <div class="fl">Telefon</div><input class="fi" id="fPhone" value="${c.phone||''}" placeholder="+49 123 456789"/>
+    <div class="fl">Unternehmensname</div>
+    <input class="fi" id="fBiz" value="${c.business_name||''}" placeholder="Pizzeria Muster" oninput="if(!document.getElementById('fUser')._touched)document.getElementById('fUser').value=genUser(this.value)"/>
+    <div class="fl">Benutzername</div>
+    <div style="display:flex;gap:6px">
+      <input class="fi" id="fUser" value="${c.username||''}" placeholder="pizzeria_muster" style="flex:1" oninput="this._touched=true"/>
+      ${isNew ? `<button type="button" onclick="document.getElementById('fUser').value=genUser(document.getElementById('fBiz').value)" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);border-radius:8px;padding:0 12px;font-size:.8rem;cursor:pointer">↻</button>` : ''}
+    </div>
+    <div class="fl">Email</div>
+    <input class="fi" id="fEmail" type="email" value="${c.email||''}" placeholder="kunde@email.de"/>
+    <div class="fl">Telefon</div>
+    <input class="fi" id="fPhone" value="${c.phone||''}" placeholder="+49 123 456789"/>
     <div class="fl">Paket</div>
     <select class="fi" id="fPlan">
       <option value="professional" ${(c.plan||'professional')==='professional'?'selected':''}>Professional — €799 + €99/Monat</option>
@@ -370,38 +389,78 @@ function clientForm(c) {
     </select>
     <div class="fl">Status</div>
     <select class="fi" id="fStatus">
-      <option value="aktiv" ${(c.status||'aktiv')==='aktiv'?'selected':''}>✅ Aktiv</option>
-      <option value="setup" ${c.status==='setup'?'selected':''}>⏳ Setup</option>
+      <option value="setup" ${(c.status||'setup')==='setup'?'selected':''}>⏳ Setup</option>
+      <option value="aktiv" ${c.status==='aktiv'?'selected':''}>✅ Aktiv</option>
       <option value="pause" ${c.status==='pause'?'selected':''}>⏸ Pause</option>
     </select>
-    <div class="fl">ElevenLabs Agent ID</div><input class="fi" id="fAgent" value="${c.agent_id||''}" placeholder="agent_xxx..."/>
-    <div class="fl">Passwort ${editingId?'(leer = nicht ändern)':''}</div><input class="fi" id="fPass" type="password" placeholder="Passwort"/>`;
+    <div class="fl">ElevenLabs Agent ID</div>
+    <input class="fi" id="fAgent" value="${c.agent_id||''}" placeholder="agent_xxx..."/>
+    <div class="fl">Passwort ${editingId ? '(leer = unverändert)' : '— auto generiert'}</div>
+    <div style="display:flex;gap:6px">
+      <input class="fi" id="fPass" value="${autoPass}" placeholder="Passwort" style="flex:1;font-family:monospace"/>
+      <button type="button" onclick="document.getElementById('fPass').value=genPass()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);border-radius:8px;padding:0 12px;font-size:.8rem;cursor:pointer">↻</button>
+    </div>
+    ${isNew ? `<div style="margin-top:12px;background:rgba(0,196,140,.07);border:1px solid rgba(0,196,140,.2);border-radius:10px;padding:.9rem 1rem">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.85rem;color:rgba(255,255,255,.6)">
+        <input type="checkbox" id="fSendMail" checked style="accent-color:#00c48c;width:15px;height:15px"/>
+        ✉️ Zugangsdaten automatisch an Kunden mailen
+      </label>
+    </div>` : ''}`;
 }
 
 async function saveClient() {
   const username = document.getElementById('fUser').value.trim();
   const business_name = document.getElementById('fBiz').value.trim();
-  if (!username || !business_name) { toast('Name + Benutzername pflicht'); return; }
+  const email = document.getElementById('fEmail').value.trim();
+  if (!username || !business_name) { toast('❌ Name + Benutzername Pflicht'); return; }
+  const pass = document.getElementById('fPass').value.trim();
   const data = {
     username, business_name,
-    email: document.getElementById('fEmail').value.trim() || null,
+    email: email || null,
     phone: document.getElementById('fPhone').value.trim() || null,
     plan: document.getElementById('fPlan').value,
     status: document.getElementById('fStatus').value,
     agent_id: document.getElementById('fAgent').value.trim() || null,
   };
-  const pass = document.getElementById('fPass').value;
-  if (pass) data.password_hash = pass; // In prod: hash this
   if (editingId) {
+    if (pass) data.password_hash = pass;
     await sbPatch('clients', editingId, data);
     toast('✅ Kunde aktualisiert');
+    closeModal(); loadAll();
   } else {
-    if (!pass) { toast('Passwort ist Pflicht'); return; }
+    if (!pass) { toast('❌ Passwort Pflicht'); return; }
     data.password_hash = pass;
     await sbPost('clients', data);
-    toast('✅ Kunde erstellt');
+    const sendMail = document.getElementById('fSendMail')?.checked;
+    if (sendMail && email) {
+      try {
+        const fd = new FormData();
+        fd.append('access_key', '57ca5d37-2f8b-4887-9910-b246aaa191df');
+        fd.append('subject', `Ihre Xyphone Zugangsdaten — ${business_name}`);
+        fd.append('from_name', 'Xyphone Team');
+        fd.append('replyto', 'xypherxai@gmail.com');
+        fd.append('email', email);
+        fd.append('message', `Hallo,\n\nwillkommen bei Xyphone!\n\nIhre Zugangsdaten:\n\nDashboard: https://xypherxai-sudo.github.io/xyphone-dashboard/\nBenutzername: ${username}\nPasswort: ${pass}\n\nBei Fragen: xypherxai@gmail.com\n\nIhr Xyphone Team`);
+        await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
+      } catch(e) {}
+    }
+    closeModal();
+    // Zugangsdaten anzeigen
+    document.getElementById('modalTitle').textContent = '🔑 Zugangsdaten';
+    document.getElementById('modalBody').innerHTML = `
+      <div style="background:rgba(0,196,140,.07);border:1px solid rgba(0,196,140,.2);border-radius:12px;padding:1.3rem;margin-bottom:1rem">
+        <div style="font-size:.72rem;color:#00c48c;font-weight:700;letter-spacing:.08em;margin-bottom:12px">ZUGANGSDATEN — BITTE NOTIEREN</div>
+        <div style="font-family:monospace;font-size:.95rem;line-height:2.2">
+          <div>🌐 <span style="color:rgba(255,255,255,.4)">URL</span>&nbsp;&nbsp; <a href="https://xypherxai-sudo.github.io/xyphone-dashboard/" target="_blank" style="color:#a78bfa">Dashboard öffnen</a></div>
+          <div>👤 <span style="color:rgba(255,255,255,.4)">User</span>&nbsp; <strong>${username}</strong></div>
+          <div>🔑 <span style="color:rgba(255,255,255,.4)">Pass</span>&nbsp; <strong style="font-size:1.05rem;color:#fff">${pass}</strong></div>
+        </div>
+      </div>
+      ${sendMail && email ? `<div style="color:#00c48c;font-size:.85rem">✉️ Zugangsdaten wurden an ${email} gesendet</div>` : '<div style="color:rgba(255,255,255,.3);font-size:.82rem">⚠️ Keine Email angegeben — Zugangsdaten manuell weitergeben</div>'}`;
+    document.getElementById('modalBtns').innerHTML = `<button class="mb mb-p" onclick="closeModal()">OK, verstanden ✓</button>`;
+    document.getElementById('modalOverlay').classList.add('open');
+    loadAll();
   }
-  closeModal(); loadAll();
 }
 
 async function setStatus(id, status) {
