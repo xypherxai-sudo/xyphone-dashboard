@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Xyphone Admin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#08080f;color:#fff;min-height:100vh}
+
+/* LOGIN */
+#loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+.login-box{background:#12121f;border:1px solid rgba(124,58,237,.3);border-radius:24px;padding:2.5rem;width:100%;max-width:360px;text-align:center}
+.login-box h1{font-size:1.5rem;font-weight:900;margin-bottom:.3rem}
+.login-box p{color:rgba(255,255,255,.35);font-size:.85rem;margin-bottom:2rem}
+.login-box input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.9rem 1rem;color:#fff;font-size:1rem;font-family:inherit;outline:none;margin-bottom:.8rem}
+.login-box input:focus{border-color:rgba(124,58,237,.6)}
+.login-btn{width:100%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:12px;padding:1rem;font-size:1rem;font-weight:700;font-family:inherit;cursor:pointer}
+.err{color:#f87171;font-size:.82rem;margin-top:.5rem;display:none}
+
+/* LAYOUT */
+#app{display:none;min-height:100vh}
+.header{background:#12121f;border-bottom:1px solid rgba(124,58,237,.2);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-size:1.2rem;font-weight:900;color:#a78bfa;letter-spacing:-.01em}
+.logo span{color:rgba(255,255,255,.3);font-weight:400;font-size:.85rem;margin-left:8px}
+.hbtn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);border-radius:8px;padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:inherit;transition:.2s}
+.hbtn:hover{background:rgba(255,255,255,.08);color:#fff}
+.hbtn.red:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#f87171}
+
+/* TABS */
+.tabs{display:flex;gap:0;padding:0 1.5rem;background:#0d0d1a;border-bottom:1px solid rgba(255,255,255,.06)}
+.tab{padding:.85rem 1.4rem;font-size:.88rem;font-weight:600;color:rgba(255,255,255,.35);cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+.tab.active{color:#a78bfa;border-bottom-color:#7c3aed}
+.tab:hover:not(.active){color:rgba(255,255,255,.6)}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;padding:1.5rem;background:#0b0b17}
+.stat-card{background:#12121f;border:1px solid rgba(124,58,237,.18);border-radius:16px;padding:1.2rem 1.4rem}
+.stat-card .num{font-size:2rem;font-weight:900;color:#a78bfa;line-height:1}
+.stat-card .lbl{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+.stat-card .sub{font-size:.8rem;color:rgba(255,255,255,.25);margin-top:2px}
+
+/* TABLE */
+.table-wrap{padding:0 1.5rem 2rem;overflow-x:auto}
+.section-head{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 0 1rem}
+.section-title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.8)}
+.add-btn{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none;border-radius:10px;padding:.55rem 1.1rem;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+thead th{text-align:left;color:rgba(255,255,255,.3);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:.7rem 1rem;border-bottom:1px solid rgba(255,255,255,.07)}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:.15s}
+tbody tr:hover{background:rgba(124,58,237,.06)}
+td{padding:.85rem 1rem;color:rgba(255,255,255,.75)}
+td .name{font-weight:700;color:#fff;font-size:.92rem}
+td .sub{font-size:.78rem;color:rgba(255,255,255,.3);margin-top:2px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:99px;font-size:.72rem;font-weight:700;letter-spacing:.03em}
+.badge-aktiv{background:rgba(0,196,140,.12);color:#00c48c;border:1px solid rgba(0,196,140,.25)}
+.badge-setup{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+.badge-pause{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2)}
+.badge-neu{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.badge-pro{background:rgba(124,58,237,.15);color:#a78bfa;border:1px solid rgba(124,58,237,.3)}
+.badge-komplett{background:rgba(0,196,140,.12);color:#00c48c;border:1px solid rgba(0,196,140,.25)}
+
+/* ROW ACTIONS */
+.row-actions{display:flex;gap:6px;align-items:center}
+.ra{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);border-radius:7px;padding:4px 10px;font-size:.78rem;cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap}
+.ra:hover{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.2)}
+.ra.green{border-color:rgba(0,196,140,.2);color:#00c48c}
+.ra.green:hover{background:rgba(0,196,140,.1)}
+.ra.red{border-color:rgba(239,68,68,.2);color:#f87171}
+.ra.red:hover{background:rgba(239,68,68,.1)}
+
+/* MODAL */
+#modalOverlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(8px)}
+#modalOverlay.open{display:flex}
+.modal{background:#12121f;border:1px solid rgba(124,58,237,.3);border-radius:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.mh{padding:1.3rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center}
+.mh h2{font-size:1rem;font-weight:800}
+.mclose{background:none;border:none;color:rgba(255,255,255,.3);font-size:1.3rem;cursor:pointer;line-height:1}
+.mclose:hover{color:#fff}
+.mbody{padding:1.3rem 1.5rem}
+.fl{font-size:.75rem;font-weight:600;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:14px}
+.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.8rem 1rem;color:#fff;font-family:inherit;font-size:.95rem;outline:none}
+.fi:focus{border-color:rgba(124,58,237,.5)}
+select.fi option{background:#12121f}
+.mbtns{display:flex;gap:.6rem;padding:1rem 1.5rem;border-top:1px solid rgba(255,255,255,.06)}
+.mb{flex:1;padding:.8rem;border-radius:10px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:.2s}
+.mb-p{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border:none}
+.mb-p:hover{opacity:.9}
+.mb-g{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
+.mb-g:hover{background:rgba(255,255,255,.07);color:#fff}
+
+/* DETAIL */
+.detail-section{margin-bottom:1.5rem}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:.88rem}
+.detail-row .dk{color:rgba(255,255,255,.35)}
+.detail-row .dv{color:#fff;font-weight:500;text-align:right}
+
+/* EMPTY */
+.empty{text-align:center;padding:4rem 1rem;color:rgba(255,255,255,.2)}
+.empty div:first-child{font-size:2.5rem;margin-bottom:.8rem}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:#1a1a2e;border:1px solid rgba(124,58,237,.4);border-radius:12px;padding:.8rem 1.2rem;font-size:.88rem;color:#a78bfa;z-index:500;animation:tin .25s ease;box-shadow:0 8px 30px rgba(124,58,237,.25);pointer-events:none}
+@keyframes tin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* SEARCH */
+.search-row{display:flex;gap:.8rem;padding:1rem 1.5rem 0;align-items:center}
+.search-inp{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.65rem 1rem;color:#fff;font-family:inherit;font-size:.9rem;outline:none}
+.search-inp:focus{border-color:rgba(124,58,237,.5)}
+.search-inp::placeholder{color:rgba(255,255,255,.2)}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div style="font-size:2rem;margin-bottom:.5rem">🛸</div>
+    <h1>Xyphone Admin</h1>
+    <p>Nur für interne Nutzung</p>
+    <input type="text" id="lu" placeholder="Benutzername"/>
+    <input type="password" id="lp" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Einloggen →</button>
+    <div class="err" id="le">❌ Falsches Passwort</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="header">
+    <div class="logo">XYPHONE <span>Admin Panel</span></div>
+    <div style="display:flex;gap:8px">
+      <span style="font-size:.8rem;color:rgba(255,255,255,.25);align-self:center" id="lastSync"></span>
+      <button class="hbtn" onclick="loadAll()">↻ Refresh</button>
+      <button class="hbtn red" onclick="logout()">Abmelden</button>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('kunden')">👥 Kunden</div>
+    <div class="tab" onclick="showTab('orders')">📋 Bestellungen</div>
+    <div class="tab" onclick="showTab('stats')">📊 Übersicht</div>
+  </div>
+
+  <!-- TAB: KUNDEN -->
+  <div id="tab-kunden">
+    <div class="search-row">
+      <input class="search-inp" id="searchInp" placeholder="Kunde suchen..." oninput="renderClients()"/>
+      <button class="add-btn" onclick="openAddClient()">+ Neuer Kunde</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Kunde</th><th>Paket</th><th>Status</th><th>Erstellt</th><th>Aktionen</th>
+          </tr>
+        </thead>
+        <tbody id="clientsTbody"></tbody>
+      </table>
+      <div class="empty" id="clientsEmpty" style="display:none">
+        <div>👥</div><div>Keine Kunden gefunden</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ORDERS -->
+  <div id="tab-orders" style="display:none">
+    <div class="table-wrap">
+      <div class="section-head"><span class="section-title">Alle Anfragen</span></div>
+      <table>
+        <thead>
+          <tr><th>Unternehmen</th><th>Branche</th><th>Kontakt</th><th>Status</th><th>Datum</th><th>Aktionen</th></tr>
+        </thead>
+        <tbody id="ordersTbody"></tbody>
+      </table>
+      <div class="empty" id="ordersEmpty" style="display:none">
+        <div>📋</div><div>Keine Anfragen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: STATS -->
+  <div id="tab-stats" style="display:none">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="table-wrap">
+      <div class="section-head"><span class="section-title">Aktive Bots</span></div>
+      <div id="activeBots"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="mh"><h2 id="modalTitle">Kunde</h2><button class="mclose" onclick="closeModal()">×</button></div>
+    <div class="mbody" id="modalBody"></div>
+    <div class="mbtns" id="modalBtns"></div>
+  </div>
+</div>
+
+<script>
+const SB_URL = 'https://llrnusfadlazswgudxjt.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxscm51c2ZhZGxhenN3Z3VkeGp0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NTE1NjY1MywiZXhwIjoyMDkwNzMyNjUzfQ.LkBEymbvVeok8qt2Fj_DCogZzp6jhdE0RFYs1L4mv2k';
+const ADMIN = { user: 'admin', pass: 'xyphone2026' };
+
+let clients = [], orders = [];
+let editingId = null;
+
+// ── AUTH ──────────────────────────────────────────────
+function doLogin() {
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value.trim();
+  if (u === ADMIN.user && p === ADMIN.pass) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadAll();
+  } else {
+    document.getElementById('le').style.display = 'block';
+  }
+}
+function logout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('lu').value = '';
+  document.getElementById('lp').value = '';
+}
+
+// ── SUPABASE ──────────────────────────────────────────
+async function sbGet(table, params = '') {
+  const res = await fetch(`${SB_URL}/rest/v1/${table}?${params}`, {
+    headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' }
+  });
+  return res.json();
+}
+async function sbPost(table, data) {
+  return fetch(`${SB_URL}/rest/v1/${table}`, {
+    method: 'POST', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' },
+    body: JSON.stringify(data)
+  }).then(r => r.json());
+}
+async function sbPatch(table, id, data) {
+  return fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'PATCH', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+}
+async function sbDelete(table, id) {
+  return fetch(`${SB_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method: 'DELETE', headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+  });
+}
+
+// ── LOAD ──────────────────────────────────────────────
+async function loadAll() {
+  document.getElementById('lastSync').textContent = 'Lädt...';
+  try {
+    [clients, orders] = await Promise.all([
+      sbGet('clients', 'order=created_at.desc'),
+      sbGet('orders', 'order=created_at.desc&limit=100').catch(() => [])
+    ]);
+    if (!Array.isArray(clients)) clients = [];
+    if (!Array.isArray(orders)) orders = [];
+    renderClients(); renderOrders(); renderStats();
+    document.getElementById('lastSync').textContent = 'Zuletzt: ' + new Date().toLocaleTimeString('de');
+  } catch(e) {
+    toast('Fehler beim Laden: ' + e.message);
+  }
+}
+
+// ── TABS ──────────────────────────────────────────────
+function showTab(t) {
+  ['kunden','orders','stats'].forEach(id => {
+    document.getElementById('tab-' + id).style.display = id === t ? 'block' : 'none';
+    document.querySelectorAll('.tab').forEach((el, i) => {
+      el.classList.toggle('active', ['kunden','orders','stats'][i] === t);
+    });
+  });
+}
+
+// ── CLIENTS RENDER ────────────────────────────────────
+function renderClients() {
+  const q = (document.getElementById('searchInp')?.value || '').toLowerCase();
+  const filtered = clients.filter(c =>
+    !q || (c.business_name||'').toLowerCase().includes(q) || (c.username||'').toLowerCase().includes(q)
+  );
+  const tbody = document.getElementById('clientsTbody');
+  const empty = document.getElementById('clientsEmpty');
+  if (!filtered.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = filtered.map(c => {
+    const status = c.status || 'aktiv';
+    const plan = c.plan || 'professional';
+    const date = c.created_at ? new Date(c.created_at).toLocaleDateString('de') : '—';
+    return `<tr>
+      <td><div class="name">${c.business_name || '—'}</div><div class="sub">@${c.username}</div></td>
+      <td><span class="badge badge-${plan.toLowerCase()}">${plan}</span></td>
+      <td><span class="badge badge-${status}">${status}</span></td>
+      <td>${date}</td>
+      <td><div class="row-actions">
+        <button class="ra" onclick="viewClient(${c.id})">Details</button>
+        <button class="ra" onclick="editClient(${c.id})">✎ Edit</button>
+        <button class="ra red" onclick="deleteClient(${c.id},'${c.business_name}')">✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function viewClient(id) {
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  const date = c.created_at ? new Date(c.created_at).toLocaleString('de') : '—';
+  document.getElementById('modalTitle').textContent = c.business_name || 'Kunde';
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-row"><span class="dk">Benutzername</span><span class="dv">@${c.username}</span></div>
+      <div class="detail-row"><span class="dk">Unternehmen</span><span class="dv">${c.business_name || '—'}</span></div>
+      <div class="detail-row"><span class="dk">Status</span><span class="dv"><span class="badge badge-${c.status||'aktiv'}">${c.status||'aktiv'}</span></span></div>
+      <div class="detail-row"><span class="dk">Paket</span><span class="dv"><span class="badge badge-${(c.plan||'professional').toLowerCase()}">${c.plan||'Professional'}</span></span></div>
+      <div class="detail-row"><span class="dk">Erstellt</span><span class="dv">${date}</span></div>
+      ${c.phone ? `<div class="detail-row"><span class="dk">Telefon</span><span class="dv">${c.phone}</span></div>` : ''}
+      ${c.email ? `<div class="detail-row"><span class="dk">Email</span><span class="dv">${c.email}</span></div>` : ''}
+      ${c.agent_id ? `<div class="detail-row"><span class="dk">ElevenLabs Agent</span><span class="dv" style="font-size:.78rem;word-break:break-all">${c.agent_id}</span></div>` : ''}
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ra green" onclick="setStatus(${c.id},'aktiv')">✅ Aktiv</button>
+      <button class="ra" onclick="setStatus(${c.id},'setup')">⏳ Setup</button>
+      <button class="ra" onclick="setStatus(${c.id},'pause')">⏸ Pause</button>
+    </div>`;
+  document.getElementById('modalBtns').innerHTML = `
+    <button class="mb mb-g" onclick="closeModal()">Schließen</button>
+    <button class="mb mb-p" onclick="editClient(${c.id})">Bearbeiten</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function openAddClient() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Neuer Kunde';
+  document.getElementById('modalBody').innerHTML = clientForm({});
+  document.getElementById('modalBtns').innerHTML = `
+    <button class="mb mb-g" onclick="closeModal()">Abbrechen</button>
+    <button class="mb mb-p" onclick="saveClient()">Speichern →</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function editClient(id) {
+  editingId = id;
+  const c = clients.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modalTitle').textContent = 'Bearbeiten: ' + c.business_name;
+  document.getElementById('modalBody').innerHTML = clientForm(c);
+  document.getElementById('modalBtns').innerHTML = `
+    <button class="mb mb-g" onclick="closeModal()">Abbrechen</button>
+    <button class="mb mb-p" onclick="saveClient()">Speichern →</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function clientForm(c) {
+  return `
+    <div class="fl">Benutzername</div><input class="fi" id="fUser" value="${c.username||''}" placeholder="pizzeria_muster"/>
+    <div class="fl">Unternehmensname</div><input class="fi" id="fBiz" value="${c.business_name||''}" placeholder="Pizzeria Muster"/>
+    <div class="fl">Email</div><input class="fi" id="fEmail" type="email" value="${c.email||''}" placeholder="kunde@email.de"/>
+    <div class="fl">Telefon</div><input class="fi" id="fPhone" value="${c.phone||''}" placeholder="+49 123 456789"/>
+    <div class="fl">Paket</div>
+    <select class="fi" id="fPlan">
+      <option value="professional" ${(c.plan||'professional')==='professional'?'selected':''}>Professional — €799 + €99/Monat</option>
+      <option value="komplett" ${c.plan==='komplett'?'selected':''}>Komplett — €1.499 + €149/Monat</option>
+    </select>
+    <div class="fl">Status</div>
+    <select class="fi" id="fStatus">
+      <option value="aktiv" ${(c.status||'aktiv')==='aktiv'?'selected':''}>✅ Aktiv</option>
+      <option value="setup" ${c.status==='setup'?'selected':''}>⏳ Setup</option>
+      <option value="pause" ${c.status==='pause'?'selected':''}>⏸ Pause</option>
+    </select>
+    <div class="fl">ElevenLabs Agent ID</div><input class="fi" id="fAgent" value="${c.agent_id||''}" placeholder="agent_xxx..."/>
+    <div class="fl">Passwort ${editingId?'(leer = nicht ändern)':''}</div><input class="fi" id="fPass" type="password" placeholder="Passwort"/>`;
+}
+
+async function saveClient() {
+  const username = document.getElementById('fUser').value.trim();
+  const business_name = document.getElementById('fBiz').value.trim();
+  if (!username || !business_name) { toast('Name + Benutzername pflicht'); return; }
+  const data = {
+    username, business_name,
+    email: document.getElementById('fEmail').value.trim() || null,
+    phone: document.getElementById('fPhone').value.trim() || null,
+    plan: document.getElementById('fPlan').value,
+    status: document.getElementById('fStatus').value,
+    agent_id: document.getElementById('fAgent').value.trim() || null,
+  };
+  const pass = document.getElementById('fPass').value;
+  if (pass) data.password_hash = pass; // In prod: hash this
+  if (editingId) {
+    await sbPatch('clients', editingId, data);
+    toast('✅ Kunde aktualisiert');
+  } else {
+    if (!pass) { toast('Passwort ist Pflicht'); return; }
+    data.password_hash = pass;
+    await sbPost('clients', data);
+    toast('✅ Kunde erstellt');
+  }
+  closeModal(); loadAll();
+}
+
+async function setStatus(id, status) {
+  await sbPatch('clients', id, { status });
+  toast('Status → ' + status); closeModal(); loadAll();
+}
+
+async function deleteClient(id, name) {
+  if (!confirm(`"${name}" wirklich löschen?`)) return;
+  await sbDelete('clients', id);
+  toast('🗑️ Gelöscht'); loadAll();
+}
+
+// ── ORDERS RENDER ─────────────────────────────────────
+function renderOrders() {
+  const tbody = document.getElementById('ordersTbody');
+  const empty = document.getElementById('ordersEmpty');
+  if (!orders.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = orders.map(o => {
+    const date = o.created_at ? new Date(o.created_at).toLocaleDateString('de') : '—';
+    const status = o.status || 'neu';
+    return `<tr>
+      <td><div class="name">${o.business_name || o.biz_name || '—'}</div><div class="sub">${o.city||''}</div></td>
+      <td>${o.branche || '—'}</td>
+      <td><div>${o.contact_name || o.name || '—'}</div><div class="sub">${o.contact_email || o.email || ''}</div></td>
+      <td><span class="badge badge-${status}">${status}</span></td>
+      <td>${date}</td>
+      <td><div class="row-actions">
+        <button class="ra green" onclick="setOrderStatus(${o.id},'aktiv')">✅ Annehmen</button>
+        <button class="ra red" onclick="setOrderStatus(${o.id},'abgelehnt')">✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+async function setOrderStatus(id, status) {
+  await sbPatch('orders', id, { status });
+  toast('Status aktualisiert'); loadAll();
+}
+
+// ── STATS ─────────────────────────────────────────────
+function renderStats() {
+  const aktiv = clients.filter(c => c.status === 'aktiv' || !c.status).length;
+  const setup = clients.filter(c => c.status === 'setup').length;
+  const mrrPro = clients.filter(c => (c.plan||'professional') === 'professional').length * 99;
+  const mrrKomp = clients.filter(c => c.plan === 'komplett').length * 149;
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="num">${clients.length}</div><div class="lbl">Kunden gesamt</div></div>
+    <div class="stat-card"><div class="num">${aktiv}</div><div class="lbl">Aktive Bots</div></div>
+    <div class="stat-card"><div class="num">${setup}</div><div class="lbl">In Setup</div></div>
+    <div class="stat-card"><div class="num">€${mrrPro + mrrKomp}</div><div class="lbl">MRR / Monat</div><div class="sub">Recurring Revenue</div></div>
+    <div class="stat-card"><div class="num">${orders.length}</div><div class="lbl">Anfragen gesamt</div></div>`;
+  document.getElementById('activeBots').innerHTML = clients.filter(c => c.status === 'aktiv' || !c.status).map(c => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.05)">
+      <div><div style="font-weight:700">${c.business_name}</div><div style="font-size:.78rem;color:rgba(255,255,255,.3)">@${c.username} · ${c.plan||'professional'}</div></div>
+      <span class="badge badge-aktiv">Live 🟢</span>
+    </div>`).join('') || '<div class="empty"><div>🤖</div><div>Noch keine aktiven Bots</div></div>';
+}
+
+// ── UTILS ─────────────────────────────────────────────
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editingId = null; }
+function toast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.remove(), 2800);
+}
+</script>
+</body>
+</html>
