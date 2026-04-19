@@ -120,7 +120,7 @@ select.fi option{background:#fff;color:#1a1a2e}
     <div style="font-size:2rem;margin-bottom:.5rem">🛸</div>
     <h1>Xyphone Admin</h1>
     <p>Nur für interne Nutzung</p>
-    <input type="text" id="lu" placeholder="Benutzername"/>
+    <input type="text" id="lu" placeholder="Benutzername" onkeydown="if(event.key==='Enter')document.getElementById('lp').focus()"/>
     <input type="password" id="lp" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()"/>
     <button class="login-btn" onclick="doLogin()">Einloggen →</button>
     <div class="err" id="le">❌ Falsches Passwort</div>
