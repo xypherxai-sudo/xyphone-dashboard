@@ -93,7 +93,7 @@
     <div class="login-logo">🍕</div>
     <h1>Xyphone Dashboard</h1>
     <p>Melde dich an um deine Bestellungen zu sehen</p>
-    <input type="text" id="loginUser" placeholder="Benutzername" />
+    <input type="text" id="loginUser" placeholder="Benutzername" onkeydown="if(event.key==='Enter')document.getElementById('loginPass').focus()" />
     <input type="password" id="loginPass" placeholder="Passwort" onkeydown="if(event.key==='Enter')doLogin()" />
     <button class="login-btn" onclick="doLogin()">Anmelden →</button>
     <div class="login-error" id="loginError">❌ Falscher Benutzername oder Passwort</div>
@@ -148,6 +148,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // Simple user DB (extend later)
 const USERS = {
   'pizzeria_latina': { pass: 'latina123', name: 'Pizzeria Latina', rid: 'pizzeria_latina' },
+  'dautpetal_doener': { pass: 'DoenerBot2025!', name: 'Döner & Pizzahaus Dautpetal', rid: 'dautpetal_doener' },
   'pizzeria_lolipop': { pass: 'test1234', name: 'Pizzeria Lolipop', rid: 'pizzeria_lolipop' },
   'admin': { pass: 'xyphone2026', name: 'Admin', rid: null }
 };

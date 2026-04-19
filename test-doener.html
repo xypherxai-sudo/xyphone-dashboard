@@ -3,47 +3,132 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>🥙 Döner & Pizzahaus Dautpetal — Bot Test</title>
+<title>🥙 Döner & Pizzahaus — Bot Test</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:linear-gradient(135deg,#f0f0ff,#e8eaf6); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; gap:1.2rem; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:linear-gradient(135deg,#f0f0ff 0%,#e8eaf6 100%);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:1.5rem;
+  gap:1.2rem;
+}
 
-.card { background:#fff; border-radius:20px; padding:1.8rem; max-width:420px; width:100%; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+.card {
+  background:#fff;
+  border-radius:20px;
+  padding:1.8rem;
+  max-width:420px;
+  width:100%;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+}
 
 .store-header { text-align:center; margin-bottom:1.2rem; }
 .store-icon { font-size:2.5rem; margin-bottom:.4rem; }
 .store-name { font-size:1.4rem; font-weight:900; color:#1a1a2e; }
-.store-sub { color:#888; font-size:.85rem; }
+.store-sub { color:#888; font-size:.85rem; margin-top:.2rem; }
 
-.info-row { display:flex; align-items:center; gap:8px; padding:.45rem 0; font-size:.88rem; color:#555; border-bottom:1px solid #f5f5f5; }
+.info-row { display:flex; align-items:center; gap:10px; padding:.5rem 0; font-size:.88rem; color:#555; border-bottom:1px solid #f5f5f5; }
 .info-row:last-child { border:none; }
-.info-row span:first-child { font-size:1rem; }
 
+/* CALL CARD */
 .call-card { text-align:center; }
-.call-label { font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#999; margin-bottom:1rem; }
+.call-title { font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:#aaa; margin-bottom:1.2rem; }
 
-.status-bar { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1.5rem; min-height:28px; }
-.dot { width:10px; height:10px; border-radius:50%; background:#ccc; }
-.dot.green { background:#00c48c; animation:pulse 1.5s infinite; }
-.dot.red { background:#f87171; }
+.status-indicator {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:1.5rem;
+  font-size:.88rem;
+  color:#888;
+  min-height:30px;
+}
+.dot {
+  width:10px; height:10px;
+  border-radius:50%;
+  background:#ddd;
+  flex-shrink:0;
+}
+.dot.connecting { background:#f59e0b; animation:blink 1s infinite; }
+.dot.active { background:#00c48c; animation:pulse 1.5s infinite; }
+.dot.ended { background:#f87171; }
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-.status-text { font-size:.85rem; color:#888; }
 
-.btn-row { display:flex; gap:.8rem; justify-content:center; }
+.btn-start {
+  width:100%;
+  padding:1.1rem;
+  background:linear-gradient(135deg,#00c48c,#00a876);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:1.05rem;
+  font-weight:700;
+  font-family:inherit;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 4px 16px rgba(0,196,140,.3);
+  transition:.2s;
+}
+.btn-start:hover { transform:translateY(-1px); box-shadow:0 6px 24px rgba(0,196,140,.4); }
+.btn-start:disabled { background:#ccc; box-shadow:none; cursor:not-allowed; transform:none; }
 
-.btn-call { background:linear-gradient(135deg,#00c48c,#00a876); color:#fff; border:none; border-radius:50px; padding:.9rem 2.2rem; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:8px; transition:.2s; box-shadow:0 4px 16px rgba(0,196,140,.3); }
-.btn-call:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,196,140,.4); }
-.btn-call:disabled { opacity:.5; cursor:default; transform:none; }
+.btn-end {
+  width:100%;
+  padding:1.1rem;
+  background:linear-gradient(135deg,#f87171,#ef4444);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:1.05rem;
+  font-weight:700;
+  font-family:inherit;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 4px 16px rgba(239,68,68,.3);
+  transition:.2s;
+  display:none;
+}
+.btn-end:hover { transform:translateY(-1px); }
 
-.btn-hangup { background:linear-gradient(135deg,#f87171,#ef4444); color:#fff; border:none; border-radius:50px; padding:.9rem 2.2rem; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:8px; transition:.2s; box-shadow:0 4px 16px rgba(239,68,68,.3); display:none; }
-.btn-hangup:hover { transform:translateY(-1px); }
+.transcript-box {
+  display:none;
+  margin-top:1rem;
+  background:#f8f8ff;
+  border-radius:12px;
+  padding:1rem;
+  max-height:180px;
+  overflow-y:auto;
+  text-align:left;
+}
+.msg { font-size:.84rem; line-height:1.7; margin-bottom:2px; }
+.msg.bot { color:#7c3aed; }
+.msg.user { color:#1a1a2e; }
 
-.transcript { background:#f8f8ff; border-radius:12px; padding:1rem; max-height:200px; overflow-y:auto; font-size:.84rem; color:#555; line-height:1.6; display:none; text-align:left; margin-top:1rem; }
-.transcript .line { margin-bottom:4px; }
-.transcript .line.bot { color:#7c3aed; font-weight:600; }
-.transcript .line.user { color:#333; }
+.hint {
+  font-size:.78rem;
+  color:#bbb;
+  margin-top:.9rem;
+  line-height:1.5;
+}
 
-.hint { font-size:.78rem; color:#aaa; margin-top:.8rem; text-align:center; }
+/* Hide ElevenLabs default widget */
+elevenlabs-convai {
+  display:none !important;
+}
 </style>
 </head>
 <body>
@@ -55,97 +140,125 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; backg
     <div class="store-sub">Dautpetal — KI-Telefonassistent</div>
   </div>
   <div class="info-row"><span>📍</span><span>Gladenbacher Str. 3, 35232 Dautpetal</span></div>
-  <div class="info-row"><span>⏰</span><span>Mo–Fr + So: 11–22 Uhr &nbsp;|&nbsp; Samstag: Ruhetag</span></div>
+  <div class="info-row"><span>⏰</span><span>Mo–Fr + So: 11–22 Uhr &nbsp;|&nbsp; Sa: Ruhetag</span></div>
   <div class="info-row"><span>📞</span><span>06461 / 8082443</span></div>
 </div>
 
 <div class="card call-card">
-  <div class="call-label">🎤 Bot testen</div>
+  <div class="call-title">🎤 Bot testen</div>
 
-  <div class="status-bar">
+  <div class="status-indicator">
     <div class="dot" id="dot"></div>
-    <div class="status-text" id="statusText">Bereit zum Anruf</div>
+    <span id="statusText">Bereit zum Gespräch</span>
   </div>
 
-  <div class="btn-row">
-    <button class="btn-call" id="btnCall" onclick="startCall()">
-      📞 Anruf starten
-    </button>
-    <button class="btn-hangup" id="btnHangup" onclick="endCall()">
-      📵 Auflegen
-    </button>
-  </div>
+  <button class="btn-start" id="btnStart" onclick="startCall()">
+    📞 Anruf starten
+  </button>
+  <button class="btn-end" id="btnEnd" onclick="endCall()">
+    📵 Auflegen
+  </button>
 
-  <div class="transcript" id="transcript"></div>
-  <div class="hint">Sage z.B.: "Ich möchte 2 Döner bestellen, Abholung"</div>
+  <div class="transcript-box" id="transcript"></div>
+
+  <div class="hint">
+    Teste z.B.:<br>
+    <em>"Ich möchte 2 Döner bestellen, Abholung, Name Thomas"</em>
+    <br>→ Bestellung erscheint sofort im Dashboard
+  </div>
 </div>
 
-<script>
-const AGENT_ID = 'agent_4001kpjn8ex1e2x9fnjr10vk93bp';
-let conversation = null;
+<!-- ElevenLabs Widget (versteckt, wir triggern es manuell) -->
+<elevenlabs-convai agent-id="agent_4001kpjn8ex1e2x9fnjr10vk93bp" id="widget"></elevenlabs-convai>
+<script src="https://elevenlabs.io/convai-widget/index.js" async></script>
 
-function setStatus(text, color) {
+<script>
+let conv = null;
+
+function setStatus(text, type) {
   document.getElementById('statusText').textContent = text;
   const dot = document.getElementById('dot');
-  dot.className = 'dot ' + (color || '');
+  dot.className = 'dot' + (type ? ' ' + type : '');
 }
 
-function addLine(role, text) {
-  const t = document.getElementById('transcript');
-  t.style.display = 'block';
+function addMsg(role, text) {
+  const box = document.getElementById('transcript');
+  box.style.display = 'block';
   const div = document.createElement('div');
-  div.className = 'line ' + role;
-  div.textContent = (role === 'bot' ? '🤖 Bot: ' : '👤 Du: ') + text;
-  t.appendChild(div);
-  t.scrollTop = t.scrollHeight;
+  div.className = 'msg ' + role;
+  div.textContent = (role === 'bot' ? '🤖 ' : '👤 ') + text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
 }
 
 async function startCall() {
-  document.getElementById('btnCall').disabled = true;
-  setStatus('Verbinde...', '');
+  const btn = document.getElementById('btnStart');
+  btn.disabled = true;
+  setStatus('Mikrofon wird angefragt...', 'connecting');
 
   try {
-    // Request microphone
     await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch(e) {
+    setStatus('❌ Mikrofon-Zugriff verweigert — bitte erlauben', 'ended');
+    btn.disabled = false;
+    return;
+  }
 
-    const { Conversation } = await import('https://cdn.jsdelivr.net/npm/@11labs/client@latest/+esm');
+  setStatus('Verbinde mit Bot...', 'connecting');
 
-    conversation = await Conversation.startSession({
-      agentId: AGENT_ID,
+  try {
+    // Dynamically load the SDK
+    const mod = await import('https://unpkg.com/@11labs/client@latest/dist/index.esm.js').catch(async () => {
+      return await import('https://cdn.jsdelivr.net/npm/@11labs/client/dist/index.esm.js');
+    });
+
+    const Conversation = mod.Conversation || mod.default?.Conversation;
+
+    conv = await Conversation.startSession({
+      agentId: 'agent_4001kpjn8ex1e2x9fnjr10vk93bp',
       onConnect: () => {
-        setStatus('Verbunden — sprechen Sie jetzt!', 'green');
-        document.getElementById('btnCall').style.display = 'none';
-        document.getElementById('btnHangup').style.display = 'flex';
+        setStatus('Verbunden — sprechen Sie jetzt!', 'active');
+        btn.style.display = 'none';
+        document.getElementById('btnEnd').style.display = 'flex';
       },
       onDisconnect: () => {
-        setStatus('Anruf beendet', 'red');
-        document.getElementById('btnCall').style.display = 'flex';
-        document.getElementById('btnCall').disabled = false;
-        document.getElementById('btnHangup').style.display = 'none';
-        setTimeout(() => setStatus('Bereit zum Anruf', ''), 3000);
+        setStatus('Anruf beendet', 'ended');
+        btn.style.display = 'flex';
+        btn.disabled = false;
+        document.getElementById('btnEnd').style.display = 'none';
+        conv = null;
+        setTimeout(() => setStatus('Bereit zum Gespräch', ''), 4000);
       },
       onMessage: (msg) => {
-        if (msg.type === 'agent_response') addLine('bot', msg.agent_response_event?.agent_response || '');
-        if (msg.type === 'user_transcript') addLine('user', msg.user_transcription_event?.user_transcript || '');
+        if (msg?.type === 'agent_response' && msg.agent_response_event?.agent_response)
+          addMsg('bot', msg.agent_response_event.agent_response);
+        if (msg?.type === 'user_transcript' && msg.user_transcription_event?.user_transcript)
+          addMsg('user', msg.user_transcription_event.user_transcript);
       },
       onError: (err) => {
-        setStatus('Fehler: ' + err.message, 'red');
-        document.getElementById('btnCall').style.display = 'flex';
-        document.getElementById('btnCall').disabled = false;
-        document.getElementById('btnHangup').style.display = 'none';
+        console.error(err);
+        setStatus('Fehler — bitte Seite neu laden', 'ended');
+        btn.style.display = 'flex';
+        btn.disabled = false;
+        document.getElementById('btnEnd').style.display = 'none';
       }
     });
   } catch(e) {
-    setStatus('Mikrofon-Zugriff verweigert', 'red');
-    document.getElementById('btnCall').disabled = false;
     console.error(e);
+    // Fallback: Widget direkt öffnen
+    setStatus('Öffne Widget...', 'connecting');
+    const w = document.getElementById('widget');
+    w.style.display = 'block';
+    w.setAttribute('open', '');
+    btn.disabled = false;
+    setStatus('Widget geöffnet — unten rechts', '');
   }
 }
 
 async function endCall() {
-  if (conversation) {
-    await conversation.endSession();
-    conversation = null;
+  if (conv) {
+    await conv.endSession();
+    conv = null;
   }
 }
 </script>
