@@ -3,36 +3,151 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>🧪 Döner Bot Test</title>
+<title>🥙 Döner & Pizzahaus Dautpetal — Bot Test</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: -apple-system, sans-serif; background: #f5f6fa; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:2rem; padding:2rem; }
-  .card { background:#fff; border-radius:20px; padding:2rem; max-width:480px; width:100%; box-shadow:0 4px 20px rgba(0,0,0,.08); text-align:center; }
-  h1 { font-size:1.6rem; font-weight:900; color:#1a1a2e; margin-bottom:.5rem; }
-  p { color:#888; font-size:.95rem; margin-bottom:1.5rem; }
-  .info { background:#f8f8ff; border:1px solid #e8e8f8; border-radius:12px; padding:1rem; text-align:left; font-size:.85rem; color:#555; line-height:1.8; }
-  .info strong { color:#1a1a2e; }
-  .badge { display:inline-block; background:#e6faf6; color:#059669; border:1px solid #a7f3d0; border-radius:99px; padding:3px 12px; font-size:.75rem; font-weight:700; margin-bottom:1rem; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:linear-gradient(135deg,#f0f0ff,#e8eaf6); min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:1.5rem; gap:1.2rem; }
+
+.card { background:#fff; border-radius:20px; padding:1.8rem; max-width:420px; width:100%; box-shadow:0 4px 24px rgba(0,0,0,.08); }
+
+.store-header { text-align:center; margin-bottom:1.2rem; }
+.store-icon { font-size:2.5rem; margin-bottom:.4rem; }
+.store-name { font-size:1.4rem; font-weight:900; color:#1a1a2e; }
+.store-sub { color:#888; font-size:.85rem; }
+
+.info-row { display:flex; align-items:center; gap:8px; padding:.45rem 0; font-size:.88rem; color:#555; border-bottom:1px solid #f5f5f5; }
+.info-row:last-child { border:none; }
+.info-row span:first-child { font-size:1rem; }
+
+.call-card { text-align:center; }
+.call-label { font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:#999; margin-bottom:1rem; }
+
+.status-bar { display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:1.5rem; min-height:28px; }
+.dot { width:10px; height:10px; border-radius:50%; background:#ccc; }
+.dot.green { background:#00c48c; animation:pulse 1.5s infinite; }
+.dot.red { background:#f87171; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.status-text { font-size:.85rem; color:#888; }
+
+.btn-row { display:flex; gap:.8rem; justify-content:center; }
+
+.btn-call { background:linear-gradient(135deg,#00c48c,#00a876); color:#fff; border:none; border-radius:50px; padding:.9rem 2.2rem; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:8px; transition:.2s; box-shadow:0 4px 16px rgba(0,196,140,.3); }
+.btn-call:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(0,196,140,.4); }
+.btn-call:disabled { opacity:.5; cursor:default; transform:none; }
+
+.btn-hangup { background:linear-gradient(135deg,#f87171,#ef4444); color:#fff; border:none; border-radius:50px; padding:.9rem 2.2rem; font-size:1rem; font-weight:700; cursor:pointer; font-family:inherit; display:flex; align-items:center; gap:8px; transition:.2s; box-shadow:0 4px 16px rgba(239,68,68,.3); display:none; }
+.btn-hangup:hover { transform:translateY(-1px); }
+
+.transcript { background:#f8f8ff; border-radius:12px; padding:1rem; max-height:200px; overflow-y:auto; font-size:.84rem; color:#555; line-height:1.6; display:none; text-align:left; margin-top:1rem; }
+.transcript .line { margin-bottom:4px; }
+.transcript .line.bot { color:#7c3aed; font-weight:600; }
+.transcript .line.user { color:#333; }
+
+.hint { font-size:.78rem; color:#aaa; margin-top:.8rem; text-align:center; }
 </style>
 </head>
 <body>
-  <div class="card">
-    <div class="badge">🟢 Bot aktiv</div>
-    <h1>🥙 Döner & Pizzahaus</h1>
-    <p>Dautpetal — KI-Telefonassistent Test</p>
-    <div class="info">
-      <strong>📍</strong> Gladenbacher Str. 3, 35232 Dautpetal<br>
-      <strong>⏰</strong> Mo-Fr + So: 11-22 Uhr | Sa: Ruhetag<br>
-      <strong>📞</strong> 06461/8082443
-    </div>
+
+<div class="card">
+  <div class="store-header">
+    <div class="store-icon">🥙</div>
+    <div class="store-name">Döner & Pizzahaus</div>
+    <div class="store-sub">Dautpetal — KI-Telefonassistent</div>
+  </div>
+  <div class="info-row"><span>📍</span><span>Gladenbacher Str. 3, 35232 Dautpetal</span></div>
+  <div class="info-row"><span>⏰</span><span>Mo–Fr + So: 11–22 Uhr &nbsp;|&nbsp; Samstag: Ruhetag</span></div>
+  <div class="info-row"><span>📞</span><span>06461 / 8082443</span></div>
+</div>
+
+<div class="card call-card">
+  <div class="call-label">🎤 Bot testen</div>
+
+  <div class="status-bar">
+    <div class="dot" id="dot"></div>
+    <div class="status-text" id="statusText">Bereit zum Anruf</div>
   </div>
 
-  <div class="card">
-    <p style="margin-bottom:.5rem;color:#7c3aed;font-weight:700">🎤 Jetzt mit dem Bot sprechen:</p>
-    <p style="font-size:.8rem">Teste eine Bestellung — sie erscheint sofort in Supabase</p>
-    <elevenlabs-convai agent-id="agent_4001kpjn8ex1e2x9fnjr10vk93bp"></elevenlabs-convai>
+  <div class="btn-row">
+    <button class="btn-call" id="btnCall" onclick="startCall()">
+      📞 Anruf starten
+    </button>
+    <button class="btn-hangup" id="btnHangup" onclick="endCall()">
+      📵 Auflegen
+    </button>
   </div>
 
-  <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+  <div class="transcript" id="transcript"></div>
+  <div class="hint">Sage z.B.: "Ich möchte 2 Döner bestellen, Abholung"</div>
+</div>
+
+<script>
+const AGENT_ID = 'agent_4001kpjn8ex1e2x9fnjr10vk93bp';
+let conversation = null;
+
+function setStatus(text, color) {
+  document.getElementById('statusText').textContent = text;
+  const dot = document.getElementById('dot');
+  dot.className = 'dot ' + (color || '');
+}
+
+function addLine(role, text) {
+  const t = document.getElementById('transcript');
+  t.style.display = 'block';
+  const div = document.createElement('div');
+  div.className = 'line ' + role;
+  div.textContent = (role === 'bot' ? '🤖 Bot: ' : '👤 Du: ') + text;
+  t.appendChild(div);
+  t.scrollTop = t.scrollHeight;
+}
+
+async function startCall() {
+  document.getElementById('btnCall').disabled = true;
+  setStatus('Verbinde...', '');
+
+  try {
+    // Request microphone
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+
+    const { Conversation } = await import('https://cdn.jsdelivr.net/npm/@11labs/client@latest/+esm');
+
+    conversation = await Conversation.startSession({
+      agentId: AGENT_ID,
+      onConnect: () => {
+        setStatus('Verbunden — sprechen Sie jetzt!', 'green');
+        document.getElementById('btnCall').style.display = 'none';
+        document.getElementById('btnHangup').style.display = 'flex';
+      },
+      onDisconnect: () => {
+        setStatus('Anruf beendet', 'red');
+        document.getElementById('btnCall').style.display = 'flex';
+        document.getElementById('btnCall').disabled = false;
+        document.getElementById('btnHangup').style.display = 'none';
+        setTimeout(() => setStatus('Bereit zum Anruf', ''), 3000);
+      },
+      onMessage: (msg) => {
+        if (msg.type === 'agent_response') addLine('bot', msg.agent_response_event?.agent_response || '');
+        if (msg.type === 'user_transcript') addLine('user', msg.user_transcription_event?.user_transcript || '');
+      },
+      onError: (err) => {
+        setStatus('Fehler: ' + err.message, 'red');
+        document.getElementById('btnCall').style.display = 'flex';
+        document.getElementById('btnCall').disabled = false;
+        document.getElementById('btnHangup').style.display = 'none';
+      }
+    });
+  } catch(e) {
+    setStatus('Mikrofon-Zugriff verweigert', 'red');
+    document.getElementById('btnCall').disabled = false;
+    console.error(e);
+  }
+}
+
+async function endCall() {
+  if (conversation) {
+    await conversation.endSession();
+    conversation = null;
+  }
+}
+</script>
 </body>
 </html>
