@@ -356,8 +356,8 @@ function renderClients() {
       <td><span class="badge badge-${plan.toLowerCase()}">${plan}</span></td>
       <td><span class="badge badge-${status}">${status==='aktiv'?'● aktiv':status==='setup'?'⏳ setup':'⏸ '+status}</span></td>
       <td><div class="row-actions">
-        <button class="ra" onclick="viewClient(${c.id})">Details</button>
-        <button class="ra" onclick="editClient(${c.id})">✎ Edit</button>
+        <button class="ra" onclick="viewClient('${c.id}')">Details</button>
+        <button class="ra" onclick="editClient('${c.id}')">✎ Edit</button>
         <button class="ra red" onclick="deleteClient(${c.id},'${c.business_name}')">✕</button>
       </div></td>
     </tr>`;
@@ -383,13 +383,13 @@ function viewClient(id) {
       <div class="detail-row"><span class="dk">Erstellt</span><span class="dv">${c.created_at?new Date(c.created_at).toLocaleDateString('de'):'—'}</span></div>
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:.5rem">
-      <button class="ra green" onclick="setStatus(${c.id},'aktiv')">● Aktiv setzen</button>
-      <button class="ra" onclick="setStatus(${c.id},'setup')">⏳ Setup</button>
-      <button class="ra" onclick="setStatus(${c.id},'pause')">⏸ Pause</button>
+      <button class="ra green" onclick="setStatus('${c.id}','aktiv')">● Aktiv setzen</button>
+      <button class="ra" onclick="setStatus('${c.id}','setup')">⏳ Setup</button>
+      <button class="ra" onclick="setStatus('${c.id}','pause')">⏸ Pause</button>
     </div>`;
   document.getElementById('modalBtns').innerHTML=`
     <button class="mb mb-g" onclick="closeModal()">Schließen</button>
-    <button class="mb mb-p" onclick="editClient(${c.id})">Bearbeiten</button>`;
+    <button class="mb mb-p" onclick="editClient('${c.id}')">Bearbeiten</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -546,8 +546,8 @@ function renderOrders() {
       <td><span class="badge badge-${status}">${status}</span></td>
       <td>${date}</td>
       <td><div class="row-actions">
-        <button class="ra green" onclick="setOrderStatus(${o.id},'aktiv')">✅ Annehmen</button>
-        <button class="ra red" onclick="setOrderStatus(${o.id},'abgelehnt')">✕</button>
+        <button class="ra green" onclick="setOrderStatus('${o.id}','aktiv')">✅ Annehmen</button>
+        <button class="ra red" onclick="setOrderStatus('${o.id}','abgelehnt')">✕</button>
       </div></td>
     </tr>`;
   }).join('');
