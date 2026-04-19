@@ -155,7 +155,7 @@ select.fi option{background:#fff;color:#1a1a2e}
       <table>
         <thead>
           <tr>
-            <th>Kunde</th><th>Paket</th><th>Status</th><th>Erstellt</th><th>Aktionen</th>
+            <th>Kunde</th><th>Telefon</th><th>Paket</th><th>Status</th><th>Aktionen</th>
           </tr>
         </thead>
         <tbody id="clientsTbody"></tbody>
@@ -296,9 +296,9 @@ function renderClients() {
     const date = c.created_at ? new Date(c.created_at).toLocaleDateString('de') : '—';
     return `<tr>
       <td><div class="name">${c.business_name || '—'}</div><div class="sub">@${c.username}</div></td>
+      <td><div style="font-size:.85rem;color:#555">${c.phone ? `<a href="tel:${c.phone}" style="color:#7c3aed;text-decoration:none">${c.phone}</a>` : '<span style="color:#ccc">—</span>'}</div></td>
       <td><span class="badge badge-${plan.toLowerCase()}">${plan}</span></td>
       <td><span class="badge badge-${status}">${status}</span></td>
-      <td>${date}</td>
       <td><div class="row-actions">
         <button class="ra" onclick="viewClient(${c.id})">Details</button>
         <button class="ra" onclick="editClient(${c.id})">✎ Edit</button>
