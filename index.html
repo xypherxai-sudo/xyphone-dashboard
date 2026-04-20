@@ -7,15 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "1f2f1d78-0aca-4f2a-8c5f-061b997f3641",
-        serviceWorkerPath: "/xyphone-dashboard/OneSignalSDKWorker.js",
-        notifyButton: { enable: false },
-        allowLocalhostAsSecureOrigin: true
+    try {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        try {
+          await OneSignal.init({
+            appId: "1f2f1d78-0aca-4f2a-8c5f-061b997f3641",
+            serviceWorkerPath: "/xyphone-dashboard/OneSignalSDKWorker.js",
+            notifyButton: { enable: false },
+            allowLocalhostAsSecureOrigin: true
+          });
+        } catch(e) { console.warn('OneSignal init failed:', e); }
       });
-    });
+    } catch(e) { console.warn('OneSignal load failed:', e); }
   </script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -36,6 +40,7 @@
       padding: 2.8rem 2.5rem;
       width: 100%; max-width: 400px;
       text-align: center;
+      -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.5);
     }
@@ -58,6 +63,9 @@
       color: white; font-size: 0.95rem; font-family: inherit;
       outline: none; margin-bottom: 0.75rem;
       transition: all 0.2s;
+      min-height: 44px;
+      -webkit-appearance: none;
+      appearance: none;
     }
     .login-box input::placeholder { color: rgba(255,255,255,0.3); }
     .login-box input:focus { border-color: rgba(124,58,237,0.6); background: rgba(124,58,237,0.08); }
@@ -70,6 +78,9 @@
       box-shadow: 0 4px 20px rgba(124,58,237,0.4);
       transition: all 0.2s;
       margin-top: 0.3rem;
+      min-height: 44px;
+      -webkit-appearance: none;
+      appearance: none;
     }
     .login-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(124,58,237,0.5); }
     .login-btn:active { transform: translateY(0); }
@@ -81,6 +92,7 @@
     /* HEADER */
     .header {
       background: rgba(14,14,28,0.8);
+      -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(124,58,237,0.15);
       padding: 0.9rem 1.5rem;
@@ -236,7 +248,7 @@
       font-size: 0.88rem; z-index: 1000;
       animation: slideIn 0.3s ease;
       box-shadow: 0 8px 40px rgba(124,58,237,0.3);
-      max-width: 300px; backdrop-filter: blur(20px);
+      max-width: 300px; -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
     }
     @keyframes slideIn { from{transform:translateX(120%);opacity:0} to{transform:none;opacity:1} }
     .bell { font-size: 1.3rem; animation: ringBell 0.5s ease 3; }
